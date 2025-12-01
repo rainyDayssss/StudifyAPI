@@ -1,0 +1,27 @@
+@StudifyAPI_HostAddress = https://localhost:7103
+
+POST {{StudifyAPI_HostAddress}}/api/users
+Content-Type: application/json
+
+{
+  "Firstname": "Pokemon",
+  "LastName": "Pokemon",
+  "Email": "pokemonjhontalisic@gmail.com",
+  "Password": "456"
+}
+
+###
+
+GET {{StudifyAPI_HostAddress}}/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwb2tlbW9uamhvbnRhbGlzaWNAZ21haWwuY29tIiwiaWQiOiIxIiwianRpIjoiNmQ4Zjg2NGMtYmQ0Yi00N2VlLWE5MDEtMDUxMDlkZjhjYTg0IiwiZXhwIjoxNzY0NTEzMTk4LCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.lQmgiIBc2v4dddtAq2LG7kzDEsIurTQWdy9fvFQ3ZI8
+###
+
+POST {{StudifyAPI_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "Email": "pokemonjhontalisic@gmail.com",
+  "Password": "123"
+}
+
+###
