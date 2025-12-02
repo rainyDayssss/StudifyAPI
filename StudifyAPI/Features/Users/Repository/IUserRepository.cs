@@ -1,4 +1,5 @@
-﻿using StudifyAPI.Features.Users.Models;
+﻿using StudifyAPI.Features.Users.DTOs;
+using StudifyAPI.Features.Users.Models;
 
 namespace StudifyAPI.Features.Users.Repositories
 {

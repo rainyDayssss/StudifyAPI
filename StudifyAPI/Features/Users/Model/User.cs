@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
+using System.ComponentModel.DataAnnotations;
+using StudifyAPI.Features.Tasks.Model;
+using StudifyAPI.Features.UserStreaks.Model;
 namespace StudifyAPI.Features.Users.Models
 {
     public class User
@@ -12,7 +14,7 @@ namespace StudifyAPI.Features.Users.Models
         public string Email { get; set; } = null!;
         [Required]
         public string Password { get; set; } = null!;
-        public UserLevel Level { get; set; } = null!; 
         public UserStreak Streak { get; set; } = null!;
+        public List<UserTaskCreateDTO> Tasks { get; set; } = new();  
     }
 }

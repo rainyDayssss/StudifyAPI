@@ -1,4 +1,5 @@
 ﻿using StudifyAPI.Features.Auth;
+using StudifyAPI.Features.Users.DTOs;
 using System.Globalization;
 
 namespace StudifyAPI.Features.Users.Services

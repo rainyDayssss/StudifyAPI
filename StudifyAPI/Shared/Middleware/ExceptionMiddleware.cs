@@ -1,8 +1,9 @@
-﻿using StudifyAPI.Common.Exceptions;
+﻿using StudifyAPI.Shared;
+using StudifyAPI.Shared.Exceptions;
 using System.Net;
 using System.Text.Json;
 
-namespace StudifyAPI.Common.Middleware
+namespace StudifyAPI.Shared.Middleware
 {
     public class ExceptionMiddleware
     {
@@ -38,15 +39,21 @@ namespace StudifyAPI.Common.Middleware
                 case UserNotFoundException:
                     statusCode = HttpStatusCode.NotFound;
                     break;
+                case TaskNotFoundException:
+                    statusCode = HttpStatusCode.NotFound;
+                    break;
+                default:
+                    statusCode = HttpStatusCode.InternalServerError;
+                    break;
             }
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
 
-            var response = new
-            {
-                message = ex.Message,
-                statusCode = context.Response.StatusCode
+            var response = new ResponseDTO<string> {
+                Data = null,
+                Success = false,
+                Message = ex.Message
             };
 
             return context.Response.WriteAsync(JsonSerializer.Serialize(response));

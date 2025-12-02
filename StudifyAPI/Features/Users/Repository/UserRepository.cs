@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using StudifyAPI.Common.Database;
+using StudifyAPI.Features.Users.DTOs;
 using StudifyAPI.Features.Users.Models;
+using StudifyAPI.Shared.Database;
 
 namespace StudifyAPI.Features.Users.Repositories
 {
@@ -32,7 +33,9 @@ namespace StudifyAPI.Features.Users.Repositories
 
         public async Task<List<User>> GetAllUsersAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .Include(u => u.Streak)
+                .ToListAsync();
         }
 
         public async Task<User?> GetUserByEmailAsync(string email)
@@ -47,7 +50,10 @@ namespace StudifyAPI.Features.Users.Repositories
 
         public async Task<User?> PatchUserAsync(int id, UserPatchDTO userPatchDTO)
         {
-            var existingUser = await _context.Users.FindAsync(id);
+            var existingUser = await _context.Users
+                .Include(u => u.Streak)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
             if (existingUser == null)
             {
                 return null;

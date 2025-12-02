@@ -1,27 +1,51 @@
 @StudifyAPI_HostAddress = https://localhost:7103
 
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJNYXlsZW5lQGdtYWlsLmNvbSIsImlkIjoiMyIsImp0aSI6ImZhNjgwNjM3LTMwODMtNGNkOC1iYjdiLTEzMTg4YzYyMjZhYiIsImV4cCI6MTc2NDU1NjE1NywiaXNzIjoiU3R1ZGlmeUFQSSIsImF1ZCI6IlN0dWRpZnlVc2VycyJ9.jrPoOuXU26wIE2DQpI5CPP-ZbtaZ5m_DNtsaFtNsXpc
+// Get all Users
+GET {{StudifyAPI_HostAddress}}/api/users
+Authorization: Bearer {{token}}
+###
+
+// Sign Up
 POST {{StudifyAPI_HostAddress}}/api/users
 Content-Type: application/json
 
 {
-  "Firstname": "Pokemon",
-  "LastName": "Pokemon",
-  "Email": "pokemonjhontalisic@gmail.com",
-  "Password": "456"
+  "Firstname": "Maylene",
+  "Lastname": "Talisic",
+  "Email": "Maylene@gmail.com",
+  "Password": "maliklik"
 }
 
 ###
 
-GET {{StudifyAPI_HostAddress}}/api/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwb2tlbW9uamhvbnRhbGlzaWNAZ21haWwuY29tIiwiaWQiOiIxIiwianRpIjoiNmQ4Zjg2NGMtYmQ0Yi00N2VlLWE5MDEtMDUxMDlkZjhjYTg0IiwiZXhwIjoxNzY0NTEzMTk4LCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.lQmgiIBc2v4dddtAq2LG7kzDEsIurTQWdy9fvFQ3ZI8
-###
-
+// Login
 POST {{StudifyAPI_HostAddress}}/api/auth/login
 Content-Type: application/json
 
 {
-  "Email": "pokemonjhontalisic@gmail.com",
-  "Password": "123"
+  "Email": "Maylene@gmail.com",
+  "Password": "maliklik"
 }
 
 ###
+
+@id=0
+DELETE {{StudifyAPI_HostAddress}}/api/users/{{id}}
+
+###
+
+GET {{StudifyAPI_HostAddress}}/api/users/{{id}}
+
+###
+
+// Update
+PATCH {{StudifyAPI_HostAddress}}/api/users/{{id}}
+Content-Type: application/json
+
+{
+  //UserPatchDTO
+}
+
+###
+

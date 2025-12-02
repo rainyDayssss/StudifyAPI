@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StudifyAPI.Features.Tasks.Model;
 using StudifyAPI.Features.Users.Models;
+using StudifyAPI.Features.UserStreaks.Model;
 
-namespace StudifyAPI.Common.Database
+namespace StudifyAPI.Shared.Database
 {
     public class StudifyDbContext : DbContext
     {
@@ -10,8 +12,8 @@ namespace StudifyAPI.Common.Database
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<UserLevel> UserLevels { get; set; }
         public DbSet<UserStreak> UserStreaks { get; set; }
+        public DbSet<UserTaskCreateDTO> UserTasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,14 +22,14 @@ namespace StudifyAPI.Common.Database
                 .IsUnique();
 
             modelBuilder.Entity<User>()
-                .HasOne(u => u.Level)
-                .WithOne(ul => ul.User)
-                .HasForeignKey<UserLevel>(ul => ul.Id);
-
-            modelBuilder.Entity<User>()
                 .HasOne(u => u.Streak)
                 .WithOne(us => us.User)
-                .HasForeignKey<UserStreak>(us => us.Id);
+                .HasForeignKey<UserStreak>(us => us.UserId);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Tasks)
+                .WithOne(t => t.User)
+                .HasForeignKey(t => t.UserId);
         }
     }
 }

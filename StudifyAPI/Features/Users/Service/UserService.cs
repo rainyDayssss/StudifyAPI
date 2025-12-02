@@ -1,8 +1,9 @@
-﻿using Microsoft.Identity.Client;
-using StudifyAPI.Common.Exceptions;
-using StudifyAPI.Features.Auth;
+﻿using StudifyAPI.Features.Auth;
+using StudifyAPI.Features.Users.DTOs;
 using StudifyAPI.Features.Users.Models;
 using StudifyAPI.Features.Users.Repositories;
+using StudifyAPI.Features.UserStreaks.Model;
+using StudifyAPI.Shared.Exceptions;
 
 namespace StudifyAPI.Features.Users.Services
 {
@@ -17,6 +18,16 @@ namespace StudifyAPI.Features.Users.Services
         }
         public async Task<UserReadDTO> CreateUserAsync(UserCreateDTO userCreateDTO)
         {
+            
+            var existingUser = await _userRepository.GetUserByEmailAsync(userCreateDTO.Email);
+
+            // Check is email already is used
+            if (existingUser is not null)
+            {
+                throw new EmailAlreadyUsedException("Email is already used");
+            }
+
+
             // mapp userCreateDTO to user entity
             User user = new()
             {
@@ -24,14 +35,10 @@ namespace StudifyAPI.Features.Users.Services
                 Lastname = userCreateDTO.Lastname,
                 Email = userCreateDTO.Email,
                 Password = userCreateDTO.Password,
-                Level = new UserLevel
+                Streak = new UserStreak()
                 {
-                    Level = 1, // default level
-                    Experience = 0 // default experience
-                },
-                Streak = new UserStreak
-                {
-                    CurrentStreak = 0 // default streak
+                    CurrentStreakDays = 0, // default 
+                    LastUpdated = DateTime.MinValue
                 }
             };
 
@@ -45,9 +52,7 @@ namespace StudifyAPI.Features.Users.Services
                 Firstname = createdUser.Firstname,
                 Lastname = createdUser.Lastname,
                 Email = createdUser.Email,
-                Level = createdUser.Level.Level,
-                Experience = createdUser.Level.Experience,
-                CurrentStreak = createdUser.Streak.CurrentStreak
+                CurrentStreakDays = createdUser.Streak.CurrentStreakDays
             };
 
         }
@@ -64,9 +69,7 @@ namespace StudifyAPI.Features.Users.Services
                 Firstname = deletedUser.Firstname,
                 Lastname = deletedUser.Lastname,
                 Email = deletedUser.Email,
-                Level = deletedUser.Level.Level,
-                Experience = deletedUser.Level.Experience,
-                CurrentStreak = deletedUser.Streak.CurrentStreak
+                CurrentStreakDays = deletedUser.Streak.CurrentStreakDays
             };
         }
 
@@ -80,9 +83,7 @@ namespace StudifyAPI.Features.Users.Services
                 Firstname = user.Firstname,
                 Lastname = user.Lastname,
                 Email = user.Email,
-                Level = user.Level.Level,
-                Experience = user.Level.Experience,
-                CurrentStreak = user.Streak.CurrentStreak
+                CurrentStreakDays = user.Streak.CurrentStreakDays
             }).ToList();
             return userReadDTOs;
         }
@@ -101,9 +102,7 @@ namespace StudifyAPI.Features.Users.Services
                 Firstname = existingUser.Firstname,
                 Lastname = existingUser.Lastname,
                 Email = existingUser.Email,
-                Level = existingUser.Level.Level,
-                Experience = existingUser.Level.Experience,
-                CurrentStreak = existingUser.Streak.CurrentStreak
+                CurrentStreakDays = existingUser.Streak.CurrentStreakDays
             };
         }
 
@@ -119,9 +118,7 @@ namespace StudifyAPI.Features.Users.Services
                 Firstname = existingUser.Firstname,
                 Lastname = existingUser.Lastname,
                 Email = existingUser.Email,
-                Level = existingUser.Level.Level,
-                Experience = existingUser.Level.Experience,
-                CurrentStreak = existingUser.Streak.CurrentStreak
+                CurrentStreakDays = existingUser.Streak.CurrentStreakDays
             };
         }
 
@@ -131,11 +128,6 @@ namespace StudifyAPI.Features.Users.Services
             if (existingUser is null)
             {
                 throw new UserNotFoundException("User not found");
-            }
-
-            // Check is email already is used
-            if (userLoginDTO.Email.Equals(existingUser.Email)) {
-                throw new EmailAlreadyUsedException("Email is already used");
             }
 
             // verify password
@@ -161,9 +153,7 @@ namespace StudifyAPI.Features.Users.Services
                 Firstname = existingUser.Firstname,
                 Lastname = existingUser.Lastname,
                 Email = existingUser.Email,
-                Level = existingUser.Level.Level,
-                Experience = existingUser.Level.Experience,
-                CurrentStreak = existingUser.Streak.CurrentStreak
+                CurrentStreakDays = existingUser.Streak.CurrentStreakDays
             };
         }
     }
