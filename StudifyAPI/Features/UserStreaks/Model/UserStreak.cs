@@ -1,10 +1,12 @@
 ﻿using StudifyAPI.Features.Users.Models;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace StudifyAPI.Features.UserStreaks.Model
 {
     public class UserStreak
     {
+        [Key]
         public int UserId { get; set; }
         // Days in current streak
         public int CurrentStreakDays { get; set; } = 0;

@@ -56,6 +56,11 @@ namespace StudifyAPI.Features.Users.Controllers
         [HttpPatch("me")]
         [Authorize]
         public async Task<IActionResult> PatchAsync([FromBody] UserPatchDTO userPatchDTO) {
+            foreach (var c in User.Claims)
+            {
+                Console.WriteLine($"{c.Type} : {c.Value}");
+            }
+
             // Get the user ID from the JWT token claims
             int userId = GetUserIdFromClaims();
             var updatedUser = await _userService.PatchUserAsync(userId, userPatchDTO);
@@ -85,10 +90,15 @@ namespace StudifyAPI.Features.Users.Controllers
 
         private int GetUserIdFromClaims()
         {
-            var claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(claim)) throw new UnauthorizedAccessException();
-            return int.Parse(claim);
-        }
+            var claim = User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value;
 
+            if (string.IsNullOrEmpty(claim))
+                throw new UnauthorizedAccessException("User ID claim missing in token.");
+
+            if (!int.TryParse(claim, out var userId))
+                throw new UnauthorizedAccessException("User ID claim is not a valid integer.");
+
+            return userId;
+        }
     }
 }

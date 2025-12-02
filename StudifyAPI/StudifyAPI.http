@@ -1,7 +1,6 @@
 @StudifyAPI_HostAddress = https://localhost:7103
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJNYXlsZW5lQGdtYWlsLmNvbSIsImlkIjoiMyIsImp0aSI6ImZhNjgwNjM3LTMwODMtNGNkOC1iYjdiLTEzMTg4YzYyMjZhYiIsImV4cCI6MTc2NDU1NjE1NywiaXNzIjoiU3R1ZGlmeUFQSSIsImF1ZCI6IlN0dWRpZnlVc2VycyJ9.jrPoOuXU26wIE2DQpI5CPP-ZbtaZ5m_DNtsaFtNsXpc
-// Get all Users
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKaG9uQGdtYWlsLmNvbSIsInVzZXJJZCI6IjEiLCJqdGkiOiJlYzU0MzZhMS1jNWIzLTQ0MjctYjdmMC1jYTEyOTE3OWE3MWUiLCJleHAiOjE3NjQ3MDYzNzcsImlzcyI6IlN0dWRpZnlBUEkiLCJhdWQiOiJTdHVkaWZ5VXNlcnMifQ.JByFs8mIdRBjef2-E1ppHC2DYqKRABdFAkzczsTzOkA
 GET {{StudifyAPI_HostAddress}}/api/users
 Authorization: Bearer {{token}}
 ###
@@ -24,15 +23,14 @@ POST {{StudifyAPI_HostAddress}}/api/auth/login
 Content-Type: application/json
 
 {
-  "Email": "Maylene@gmail.com",
-  "Password": "maliklik"
+  "Email": "Jhon@gmail.com",
+  "Password": "Jhon123"
 }
 
 ###
 
-@id=0
-DELETE {{StudifyAPI_HostAddress}}/api/users/{{id}}
-
+DELETE {{StudifyAPI_HostAddress}}/api/users/me
+Authorization: Bearer {{token}}
 ###
 
 GET {{StudifyAPI_HostAddress}}/api/users/{{id}}
@@ -40,11 +38,11 @@ GET {{StudifyAPI_HostAddress}}/api/users/{{id}}
 ###
 
 // Update
-PATCH {{StudifyAPI_HostAddress}}/api/users/{{id}}
+PATCH {{StudifyAPI_HostAddress}}/api/users/me
 Content-Type: application/json
-
+Authorization: Bearer {{token}}
 {
-  //UserPatchDTO
+  "Firstname": "Pokemon"
 }
 
 ###

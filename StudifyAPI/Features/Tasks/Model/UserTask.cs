@@ -4,7 +4,7 @@ using StudifyAPI.Features.Users.Models;
 
 namespace StudifyAPI.Features.Tasks.Model
 {
-    public class UserTaskCreateDTO
+    public class UserTask
     {
         public int Id { get; set; }
         [Required]

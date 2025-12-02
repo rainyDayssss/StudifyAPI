@@ -33,12 +33,11 @@ namespace StudifyAPI.Shared.Middleware
                 case EmailAlreadyUsedException:
                     statusCode = HttpStatusCode.Conflict;
                     break;
+                case InvalidEmailException:
                 case InvalidPasswordException:
                     statusCode = HttpStatusCode.Unauthorized;
                     break;
                 case UserNotFoundException:
-                    statusCode = HttpStatusCode.NotFound;
-                    break;
                 case TaskNotFoundException:
                     statusCode = HttpStatusCode.NotFound;
                     break;

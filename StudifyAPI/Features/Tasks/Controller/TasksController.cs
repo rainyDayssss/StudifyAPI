@@ -24,7 +24,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         public async Task<IActionResult> GetAllAsync()
         {
             var userId = GetUserIdFromClaims();
-            return Ok(new ResponseDTO<List<UserTaskCreateDTO>>
+            return Ok(new ResponseDTO<List<UserTask>>
             {
                 Success = true,
                 Message = "Tasks retrieved successfully",
@@ -37,7 +37,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         public async Task<IActionResult> GetAsync(int taskId)
         {
             var userId = GetUserIdFromClaims();
-            return Ok(new ResponseDTO<UserTaskCreateDTO?>
+            return Ok(new ResponseDTO<UserTask?>
             {
                 Success = true,
                 Message = "Task retrieved successfully",
@@ -47,14 +47,14 @@ namespace StudifyAPI.Features.Tasks.Controller
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateAsync([FromBody] UserTaskCreateDTO taskCreateDTO)
+        public async Task<IActionResult> CreateAsync([FromBody] UserTask taskCreateDTO)
         {
             var userId = GetUserIdFromClaims();
             var createdTask = await _taskService.CreateTaskAsync(userId, taskCreateDTO);
             return CreatedAtAction(
                 actionName: "GetAsync",
                 routeValues: new { taskId = createdTask.Id },
-                value: new ResponseDTO<UserTaskCreateDTO>
+                value: new ResponseDTO<UserTask>
                 {
                     Success = true,
                     Message = "Task created successfully.",
@@ -68,7 +68,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         {
             var userId = GetUserIdFromClaims();
             var patchedTask = await _taskService.PatchTaskAsync(taskId, userId, taskPatchDTO);
-            return Ok(new ResponseDTO<UserTaskCreateDTO?>
+            return Ok(new ResponseDTO<UserTask?>
             {
                 Success = true,
                 Message = "Task patched successfully",
@@ -82,7 +82,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         {
             var userId = GetUserIdFromClaims();
             var deletedTask = await _taskService.DeleteTaskAsync(taskId, userId);
-            return Ok(new ResponseDTO<UserTaskCreateDTO?>
+            return Ok(new ResponseDTO<UserTask?>
             {
                 Success = true,
                 Message = "Task deleted successfully",
