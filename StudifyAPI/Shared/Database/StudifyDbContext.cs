@@ -13,7 +13,7 @@ namespace StudifyAPI.Shared.Database
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserStreak> UserStreaks { get; set; }
-        public DbSet<UserTaskCreateDTO> UserTasks { get; set; }
+        public DbSet<UserTask> UserTasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

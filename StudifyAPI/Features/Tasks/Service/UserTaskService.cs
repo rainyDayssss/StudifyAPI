@@ -12,12 +12,12 @@ namespace StudifyAPI.Features.Tasks.Service
         {
             _taskRepository = taskRepository;
         }
-        public async Task<UserTaskCreateDTO> CreateTaskAsync(int userId, UserTaskCreateDTO taskCreateDTO)
+        public async Task<UserTask> CreateTaskAsync(int userId, UserTask taskCreateDTO)
         {
             return await _taskRepository.CreateTaskAsync(userId, taskCreateDTO);
         }
 
-        public async Task<UserTaskCreateDTO?> DeleteTaskAsync(int taskId, int userId)
+        public async Task<UserTask?> DeleteTaskAsync(int taskId, int userId)
         {
             var existingTask = await _taskRepository.GetTaskByIdAsync(taskId, userId);
             if (existingTask == null)
@@ -27,12 +27,12 @@ namespace StudifyAPI.Features.Tasks.Service
             return existingTask;
         }
 
-        public async Task<List<UserTaskCreateDTO>> GetAllTasksByUserIdAsync(int userId)
+        public async Task<List<UserTask>> GetAllTasksByUserIdAsync(int userId)
         {
             return await _taskRepository.GetAllTasksByUserIdAsync(userId);
         }
 
-        public async Task<UserTaskCreateDTO?> GetTaskAsync(int taskId, int userId)
+        public async Task<UserTask?> GetTaskAsync(int taskId, int userId)
         {
             var existingTask = await _taskRepository.GetTaskByIdAsync(taskId, userId);
             if (existingTask == null)
@@ -42,7 +42,7 @@ namespace StudifyAPI.Features.Tasks.Service
             return existingTask;
         }
 
-        public async Task<UserTaskCreateDTO?> PatchTaskAsync(int taskId, int userId, UserTaskPatchDTO taskPatchDTO)
+        public async Task<UserTask?> PatchTaskAsync(int taskId, int userId, UserTaskPatchDTO taskPatchDTO)
         {
             var existingTask = await _taskRepository.PatchTaskAsync(taskId, userId, taskPatchDTO);
             if (existingTask == null)

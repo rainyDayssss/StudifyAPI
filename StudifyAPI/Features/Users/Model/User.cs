@@ -15,6 +15,6 @@ namespace StudifyAPI.Features.Users.Models
         [Required]
         public string Password { get; set; } = null!;
         public UserStreak Streak { get; set; } = null!;
-        public List<UserTaskCreateDTO> Tasks { get; set; } = new();  
+        public List<UserTask> Tasks { get; set; } = new();  
     }
 }

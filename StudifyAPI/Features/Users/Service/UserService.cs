@@ -124,10 +124,14 @@ namespace StudifyAPI.Features.Users.Services
 
         public async Task<string> LoginAsync(UserLoginDTO userLoginDTO)
         {
-            var existingUser = await _userRepository.GetUserByEmailAsync(userLoginDTO.Email); 
+            var existingUser = await _userRepository.GetUserByEmailAsync(userLoginDTO.Email);
             if (existingUser is null)
             {
                 throw new UserNotFoundException("User not found");
+            }
+
+            if (!existingUser.Email.Equals(userLoginDTO.Email)) {
+                throw new InvalidEmailException("Invalid email");
             }
 
             // verify password

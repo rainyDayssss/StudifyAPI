@@ -12,7 +12,7 @@ namespace StudifyAPI.Features.Tasks.Repository
         {
             _context = context;
         }
-        public async Task<UserTaskCreateDTO> CreateTaskAsync(int userId, UserTaskCreateDTO taskCreateDTO)
+        public async Task<UserTask> CreateTaskAsync(int userId, UserTask taskCreateDTO)
         {
             taskCreateDTO.UserId = userId;
             await _context.UserTasks.AddAsync(taskCreateDTO);
@@ -20,7 +20,7 @@ namespace StudifyAPI.Features.Tasks.Repository
             return taskCreateDTO;
         }
 
-        public async Task<UserTaskCreateDTO?> DeleteTaskAsync(int taskId, int userId)
+        public async Task<UserTask?> DeleteTaskAsync(int taskId, int userId)
         {
             var existingTask = await _context.UserTasks.FirstOrDefaultAsync(t => t.Id == taskId && t.UserId == userId);
             if (existingTask == null)
@@ -32,17 +32,17 @@ namespace StudifyAPI.Features.Tasks.Repository
             return existingTask;
         }
 
-        public async Task<List<UserTaskCreateDTO>> GetAllTasksByUserIdAsync(int userId)
+        public async Task<List<UserTask>> GetAllTasksByUserIdAsync(int userId)
         {
             return await _context.UserTasks.ToListAsync();
         }
 
-        public async Task<UserTaskCreateDTO?> GetTaskByIdAsync(int taskId, int userId)
+        public async Task<UserTask?> GetTaskByIdAsync(int taskId, int userId)
         {
             return await _context.UserTasks.FirstOrDefaultAsync(t => t.Id == taskId && t.UserId == userId);
         }
 
-        public async Task<UserTaskCreateDTO?> PatchTaskAsync(int taskId, int userId, UserTaskPatchDTO taskPatchDTO)
+        public async Task<UserTask?> PatchTaskAsync(int taskId, int userId, UserTaskPatchDTO taskPatchDTO)
         {
             var existingTask = await _context.UserTasks.FirstOrDefaultAsync(t => t.Id == taskId && t.UserId == userId);
             if (existingTask == null)

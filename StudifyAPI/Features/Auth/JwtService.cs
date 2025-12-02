@@ -21,10 +21,11 @@ namespace StudifyAPI.Features.Auth
             // Define claims (info stored in token)
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, email),
-            new Claim("id", userId.ToString()), // custom claim
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // unique token id
+                new Claim(JwtRegisteredClaimNames.Sub, email),
+                new Claim("userId", userId.ToString()), // <- standard claim
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
 
             // Create signing credentials using secret key
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]));
