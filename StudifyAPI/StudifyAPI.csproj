@@ -21,7 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Friends\" />
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Features\Pomodoro\DTO\PomodoroType.cs" />
   </ItemGroup>
 
 </Project>

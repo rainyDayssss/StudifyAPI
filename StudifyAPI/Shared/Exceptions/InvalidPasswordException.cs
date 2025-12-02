@@ -1,4 +1,4 @@
-﻿namespace StudifyAPI.Common.Exceptions
+﻿namespace StudifyAPI.Shared.Exceptions
 {
     public class InvalidPasswordException : Exception
     {

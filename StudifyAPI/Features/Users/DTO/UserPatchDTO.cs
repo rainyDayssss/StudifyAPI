@@ -1,4 +1,4 @@
-﻿namespace StudifyAPI.Features.Users
+﻿namespace StudifyAPI.Features.Users.DTOs
 {
     public class UserPatchDTO
     {

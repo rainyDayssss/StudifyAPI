@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudifyAPI.Features.Users.Services;
+
 namespace StudifyAPI.Features.Auth
 {
     [Route("api/[controller]")]
