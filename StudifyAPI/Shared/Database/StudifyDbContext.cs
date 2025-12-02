@@ -24,7 +24,8 @@ namespace StudifyAPI.Shared.Database
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Streak)
                 .WithOne(us => us.User)
-                .HasForeignKey<UserStreak>(us => us.UserId);
+                .HasForeignKey<UserStreak>(us => us.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Tasks)

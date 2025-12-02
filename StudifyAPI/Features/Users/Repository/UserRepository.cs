@@ -21,7 +21,10 @@ namespace StudifyAPI.Features.Users.Repositories
 
         public async Task<User?> DeleteUserAsync(int id)
         {
-            var existingUser = await _context.Users.FindAsync(id);
+            var existingUser = await _context.Users
+                .Include(u => u.Streak)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
             if (existingUser == null)
             {
                 return null;
