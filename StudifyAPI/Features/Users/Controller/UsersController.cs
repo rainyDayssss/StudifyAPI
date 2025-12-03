@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using StudifyAPI.Features.Users.DTOs;
 using StudifyAPI.Features.Users.Services;
 using StudifyAPI.Shared;
-using System.Security.Claims;
 
 
 namespace StudifyAPI.Features.Users.Controllers
@@ -87,6 +86,9 @@ namespace StudifyAPI.Features.Users.Controllers
                 Data = deletedUser 
             });
         }
+
+
+        // For logging out, let the client just delete the token on their side.
 
         private int GetUserIdFromClaims()
         {

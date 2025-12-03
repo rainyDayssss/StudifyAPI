@@ -1,8 +1,7 @@
 ﻿namespace StudifyAPI.Features.Tasks.DTO
 {
-    public class UserCreateTaskDTO
+    public class UserTaskCreateDTO
     {
         public string Title { get; set; } = null!;
-        public bool IsCompleted { get; set; } = false;
     }
 }

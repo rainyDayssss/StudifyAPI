@@ -1,6 +1,7 @@
 @StudifyAPI_HostAddress = https://localhost:7103
 
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKaG9uQGdtYWlsLmNvbSIsInVzZXJJZCI6IjEiLCJqdGkiOiJlYzU0MzZhMS1jNWIzLTQ0MjctYjdmMC1jYTEyOTE3OWE3MWUiLCJleHAiOjE3NjQ3MDYzNzcsImlzcyI6IlN0dWRpZnlBUEkiLCJhdWQiOiJTdHVkaWZ5VXNlcnMifQ.JByFs8mIdRBjef2-E1ppHC2DYqKRABdFAkzczsTzOkA
+// USER
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYWxpa0BnbWFpbC5jb20iLCJ1c2VySWQiOiIzIiwianRpIjoiYzA2MjM2YWMtNWUxMy00YTI3LWE0NTQtMDA1ODM2YzM5MTNkIiwiZXhwIjoxNzY0NzQwMTY4LCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.fYDTJ7eQbGj7EF-05GwBgJq0jVmODWDc1M3CaeUJpOc
 GET {{StudifyAPI_HostAddress}}/api/users
 Authorization: Bearer {{token}}
 ###
@@ -10,9 +11,9 @@ POST {{StudifyAPI_HostAddress}}/api/users
 Content-Type: application/json
 
 {
-  "Firstname": "Maylene",
+  "Firstname": "malik",
   "Lastname": "Talisic",
-  "Email": "Maylene@gmail.com",
+  "Email": "malik@gmail.com",
   "Password": "maliklik"
 }
 
@@ -23,9 +24,9 @@ POST {{StudifyAPI_HostAddress}}/api/auth/login
 Content-Type: application/json
 
 {
-  "Email": "Jhon@gmail.com",
-  "Password": "Jhon123"
-}
+  "Email": "malik@gmail.com",
+  "Password": "maliklik"
+} 
 
 ###
 
@@ -47,3 +48,42 @@ Authorization: Bearer {{token}}
 
 ###
 
+// TASK
+// Create task
+POST {{StudifyAPI_HostAddress}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer {{token}}
+{
+  "Title": "Study math"
+}
+
+###
+
+
+// Get all tasks
+GET {{StudifyAPI_HostAddress}}/api/tasks/me
+Authorization: Bearer {{token}}
+###
+
+
+// Patch task
+@taskId=1
+PATCH {{StudifyAPI_HostAddress}}/api/tasks/{{taskId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+{
+  "isCompleted": true
+}
+
+
+###
+
+// Delete task
+DELETE {{StudifyAPI_HostAddress}}/api/tasks/{{taskId}}
+Authorization: Bearer {{token}}
+###
+
+
+GET {{StudifyAPI_HostAddress}}/api/pomodoros
+Authorization: Bearer {{token}}
+###
