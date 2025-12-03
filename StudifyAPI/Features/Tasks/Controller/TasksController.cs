@@ -47,12 +47,12 @@ namespace StudifyAPI.Features.Tasks.Controller
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateAsync([FromBody] UserTask taskCreateDTO)
+        public async Task<IActionResult> CreateAsync([FromBody] UserTaskCreateDTO taskCreateDTO)
         {
             var userId = GetUserIdFromClaims();
             var createdTask = await _taskService.CreateTaskAsync(userId, taskCreateDTO);
             return CreatedAtAction(
-                actionName: "GetAsync",
+                actionName: "Get",
                 routeValues: new { taskId = createdTask.Id },
                 value: new ResponseDTO<UserTask>
                 {
@@ -92,9 +92,15 @@ namespace StudifyAPI.Features.Tasks.Controller
         }
         private int GetUserIdFromClaims()
         {
-            var claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(claim)) throw new UnauthorizedAccessException();
-            return int.Parse(claim);
+            var claim = User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value;
+
+            if (string.IsNullOrEmpty(claim))
+                throw new UnauthorizedAccessException("User ID claim missing in token.");
+
+            if (!int.TryParse(claim, out var userId))
+                throw new UnauthorizedAccessException("User ID claim is not a valid integer.");
+
+            return userId;
         }
     }
 }

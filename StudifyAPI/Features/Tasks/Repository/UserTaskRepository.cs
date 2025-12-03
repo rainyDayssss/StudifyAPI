@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudifyAPI.Features.Tasks.DTO;
 using StudifyAPI.Features.Tasks.Model;
+using StudifyAPI.Features.Users.Repositories;
 using StudifyAPI.Shared.Database;
+using StudifyAPI.Shared.Exceptions;
+using System.Threading.Tasks;
 
 namespace StudifyAPI.Features.Tasks.Repository
 {
@@ -12,12 +15,17 @@ namespace StudifyAPI.Features.Tasks.Repository
         {
             _context = context;
         }
-        public async Task<UserTask> CreateTaskAsync(int userId, UserTask taskCreateDTO)
+        public async Task<UserTask> CreateTaskAsync(int userId, UserTask task)
         {
-            taskCreateDTO.UserId = userId;
-            await _context.UserTasks.AddAsync(taskCreateDTO);
+            var existingUser = await _context.Users.FindAsync(userId);
+            if (existingUser == null)
+            {
+                throw new UserNotFoundException("User not found"); // if the user was not logged in
+            }
+
+            await _context.UserTasks.AddAsync(task);
             await _context.SaveChangesAsync();
-            return taskCreateDTO;
+            return task;
         }
 
         public async Task<UserTask?> DeleteTaskAsync(int taskId, int userId)
@@ -34,7 +42,9 @@ namespace StudifyAPI.Features.Tasks.Repository
 
         public async Task<List<UserTask>> GetAllTasksByUserIdAsync(int userId)
         {
-            return await _context.UserTasks.ToListAsync();
+            return await _context.UserTasks
+                .Where(t => t.UserId == userId)
+                .ToListAsync();
         }
 
         public async Task<UserTask?> GetTaskByIdAsync(int taskId, int userId)
@@ -51,6 +61,7 @@ namespace StudifyAPI.Features.Tasks.Repository
             }
             existingTask.Title = taskPatchDTO.Title ?? existingTask.Title;
             existingTask.IsCompleted = taskPatchDTO.IsCompleted ?? existingTask.IsCompleted;
+            await _context.SaveChangesAsync();
             return existingTask;
         }
     }
