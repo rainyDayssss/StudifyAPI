@@ -1,34 +1,66 @@
-﻿using StudifyAPI.Features.UserStreaks.Model;
+﻿using StudifyAPI.Features.Users.Repositories;
+using StudifyAPI.Features.UserStreaks.DTO;
+using StudifyAPI.Features.UserStreaks.Model;
 using StudifyAPI.Features.UserStreaks.Repository;
+using StudifyAPI.Shared.Exceptions;
 
 namespace StudifyAPI.Features.UserStreaks.Service
 {
     public class UserStreakService : IUserStreakService
     {
         private readonly IUserStreakRepository _userStreakRepository;
-        public UserStreakService(IUserStreakRepository userStreakRepository)
+        private readonly IUserRepository _userRepository;
+        public UserStreakService(IUserStreakRepository userStreakRepository, IUserRepository userRepository)
         {
             _userStreakRepository = userStreakRepository;
+            _userRepository = userRepository;
         }
 
-        public async Task<UserStreak?> GetUserStreakByUserIdAsync(int userId)
+        public async Task<UserStreakDTO> GetUserStreakByUserIdAsync(int userId)
         {
-            return await _userStreakRepository.GetByUserIdAsync(userId);
-        }
+            var existingUser = await _userRepository.GetUserByIdAsync(userId);
+            if (existingUser == null)
+            {
+                throw new UserNotFoundException("User not found"); // its better to check the user on user repo, then if not found, meaning there is also no streak
+            }
 
-        public async Task<UserStreak> UpdateUserStreaksAsync(int userId)
-        {
             var streak = await _userStreakRepository.GetByUserIdAsync(userId);
+            if (streak is null) {
+                throw new Exception("Streak not found"); //TODO: a custom exception can be created here 
+            }
+            var userStreakDTO = new UserStreakDTO
+            {
+                CurrentStreakDays = streak.CurrentStreakDays,
+                LastUpdated = streak.LastUpdated
+            };
+            return userStreakDTO;
+        }
 
+        public async Task<UserStreakDTO> UpdateUserStreaksAsync(int userId)
+        {
+            var existingUser = await _userRepository.GetUserByIdAsync(userId);
+            if (existingUser == null)
+            {
+                throw new UserNotFoundException("User not found"); 
+            }
+
+            var streak = await _userStreakRepository.GetByUserIdAsync(userId);
             if (streak is null) { // This will rarely happen
                 throw new Exception("User streak not found"); // TODO: create custom exception
             }
+
+            // map streak to streakDTO
+            var streakDTO = new UserStreakDTO
+            {
+                CurrentStreakDays = streak.CurrentStreakDays,
+                LastUpdated = streak.LastUpdated
+            };
 
             var today = DateTime.Today;
             if (streak.LastUpdated == today)
             {
                 // Already updated today, do nothing
-                return streak;
+                return streakDTO;
             }
 
             if (streak.LastUpdated == today.AddDays(-1))
@@ -47,7 +79,7 @@ namespace StudifyAPI.Features.UserStreaks.Service
             // Automatically save changes
             await _userStreakRepository.SaveChangesAsync();
 
-            return streak;
+            return streakDTO;
         }
     }
 }
