@@ -22,7 +22,7 @@ namespace StudifyAPI.Features.UserStreaks.Controller
         public async Task<IActionResult> GetAsync()
         {
             var userId = GetUserIdFromClaims();
-            return Ok(new ResponseDTO<UserStreakDTO>
+            return Ok(new ResponseDTO<UserStreakReadDTO>
             {
                 Success = true,
                 Message = "User streak retrieved successfully",
@@ -36,7 +36,7 @@ namespace StudifyAPI.Features.UserStreaks.Controller
         {
             var userId = GetUserIdFromClaims();
 
-            return Ok( new ResponseDTO<UserStreakDTO> { 
+            return Ok( new ResponseDTO<UserStreakReadDTO> { 
                 Success = true,
                 Message = "User streak updated successfully",
                 Data = await _streakService.UpdateUserStreaksAsync(userId)

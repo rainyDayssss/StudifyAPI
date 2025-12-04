@@ -43,8 +43,20 @@ namespace StudifyAPI.Features.Users.Controllers
                 Data = userProfile
             });
         }
-        
 
+        // search by using email
+        [HttpGet("{email}")]
+        [Authorize]
+        public async Task<IActionResult> GetByEmailAsync(string email)
+        {
+            var user = await _userService.GetUserByEmailAsync(email);
+            return Ok(new ResponseDTO<UserReadDTO>
+            {
+                Success = true,
+                Message = "User retrieved successfully.",
+                Data = user
+            });
+        }
 
         // SignUp new user
         [HttpPost]

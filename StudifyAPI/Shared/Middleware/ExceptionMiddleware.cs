@@ -40,6 +40,7 @@ namespace StudifyAPI.Shared.Middleware
                 case UserNotFoundException:
                 case TaskNotFoundException:
                 case StreakNotFoundException:
+                case FriendRequestNotFoundException:
                     statusCode = HttpStatusCode.NotFound;
                     break;
                 default:

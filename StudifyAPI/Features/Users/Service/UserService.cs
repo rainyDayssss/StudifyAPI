@@ -48,7 +48,7 @@ namespace StudifyAPI.Features.Users.Services
             User createdUser = await _userRepository.CreateUserAsync(user);
 
             // map created user entity to UserReadDTO
-            return new UserReadDTO()
+            var createdUserDTO = new UserReadDTO()
             {
                 Id = createdUser.Id,
                 Firstname = createdUser.Firstname,
@@ -58,6 +58,7 @@ namespace StudifyAPI.Features.Users.Services
                 CurrentStreakDays = createdUser.Streak.CurrentStreakDays
             };
 
+            return createdUserDTO;
         }
 
         public async Task<UserReadDTO> DeleteUserAsync(int id)
@@ -66,7 +67,7 @@ namespace StudifyAPI.Features.Users.Services
             if (deletedUser is null) {
                 throw new UserNotFoundException("User not found");
             }
-            return new UserReadDTO()
+            var deletedUserDTO = new UserReadDTO()
             {
                 Id = deletedUser.Id,
                 Firstname = deletedUser.Firstname,
@@ -75,6 +76,7 @@ namespace StudifyAPI.Features.Users.Services
                 IsOnline = deletedUser.IsOnline,
                 CurrentStreakDays = deletedUser.Streak.CurrentStreakDays
             };
+            return deletedUserDTO;
         }
 
         public async Task<List<UserReadDTO>> GetAllUsersAsync()
@@ -100,8 +102,8 @@ namespace StudifyAPI.Features.Users.Services
             {
                 throw new Exception("User not found"); // create more custom exceptions
             }
-            // return the mapped UserReadDTO
-            return new UserReadDTO()
+            
+            var userReadDTO = new UserReadDTO()
             {
                 Id = existingUser.Id,
                 Firstname = existingUser.Firstname,
@@ -110,6 +112,9 @@ namespace StudifyAPI.Features.Users.Services
                 IsOnline = existingUser.IsOnline,
                 CurrentStreakDays = existingUser.Streak.CurrentStreakDays
             };
+
+            // return the mapped UserReadDTO
+            return userReadDTO;
         }
 
         public async Task<UserReadDTO> GetUserByIdAsync(int id)
@@ -118,7 +123,7 @@ namespace StudifyAPI.Features.Users.Services
             if (existingUser is null) {
                 throw new UserNotFoundException("User not found");
             }
-            return new UserReadDTO()
+            var userReadDTO = new UserReadDTO()
             {
                 Id = existingUser.Id,
                 Firstname = existingUser.Firstname,
@@ -127,6 +132,7 @@ namespace StudifyAPI.Features.Users.Services
                 IsOnline = existingUser.IsOnline,
                 CurrentStreakDays = existingUser.Streak.CurrentStreakDays
             };
+            return userReadDTO;
         }
 
         public async Task<string> LoginAsync(UserLoginDTO userLoginDTO)
@@ -156,7 +162,8 @@ namespace StudifyAPI.Features.Users.Services
             if (existingUser is null) {
                 throw new UserNotFoundException("User not found");
             }
-            return new UserReadDTO()
+
+            var logoutUserDTO = new UserReadDTO()
             {
                 Id = existingUser.Id,
                 Firstname = existingUser.Firstname,
@@ -165,6 +172,7 @@ namespace StudifyAPI.Features.Users.Services
                 IsOnline = existingUser.IsOnline,
                 CurrentStreakDays = existingUser.Streak.CurrentStreakDays
             };
+            return logoutUserDTO;
         }
 
         public async Task<UserReadDTO> PatchUserAsync(int id, UserPatchDTO userPatchDTO)
@@ -173,7 +181,7 @@ namespace StudifyAPI.Features.Users.Services
             if (existingUser is null) { 
                 throw new UserNotFoundException("User not found");
             }
-            return new UserReadDTO()
+            var updatedUserDTO = new UserReadDTO()
             {
                 Id = existingUser.Id,
                 Firstname = existingUser.Firstname,
@@ -182,6 +190,7 @@ namespace StudifyAPI.Features.Users.Services
                 IsOnline = existingUser.IsOnline,
                 CurrentStreakDays = existingUser.Streak.CurrentStreakDays
             };
+            return updatedUserDTO;
         }
     }
 }
