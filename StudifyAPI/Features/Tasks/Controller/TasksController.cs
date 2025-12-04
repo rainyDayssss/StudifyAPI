@@ -25,7 +25,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         public async Task<IActionResult> GetAllAsync()
         {
             var userId = GetUserIdFromClaims();
-            return Ok(new ResponseDTO<List<UserTask>>
+            return Ok(new ResponseDTO<List<UserTaskReadDTO>>
             {
                 Success = true,
                 Message = "Tasks retrieved successfully",
@@ -38,7 +38,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         public async Task<IActionResult> GetAsync(int taskId)
         {
             var userId = GetUserIdFromClaims();
-            return Ok(new ResponseDTO<UserTask?>
+            return Ok(new ResponseDTO<UserTaskReadDTO?>
             {
                 Success = true,
                 Message = "Task retrieved successfully",
@@ -52,7 +52,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         {
             var userId = GetUserIdFromClaims();
             var createdTask = await _taskService.CreateTaskAsync(userId, taskCreateDTO);
-            return Ok(new ResponseDTO<UserTask?> 
+            return Ok(new ResponseDTO<UserTaskReadDTO?> 
             { 
                 Success = true, 
                 Message = "Task created successfully", 
@@ -66,7 +66,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         {
             var userId = GetUserIdFromClaims();
             var patchedTask = await _taskService.PatchTaskAsync(taskId, userId, taskPatchDTO);
-            return Ok(new ResponseDTO<UserTask?>
+            return Ok(new ResponseDTO<UserTaskReadDTO?>
             {
                 Success = true,
                 Message = "Task patched successfully",
@@ -80,7 +80,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         {
             var userId = GetUserIdFromClaims();
             var deletedTask = await _taskService.DeleteTaskAsync(taskId, userId);
-            return Ok(new ResponseDTO<UserTask?>
+            return Ok(new ResponseDTO<UserTaskReadDTO?>
             {
                 Success = true,
                 Message = "Task deleted successfully",

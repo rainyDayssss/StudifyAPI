@@ -17,7 +17,7 @@ namespace StudifyAPI.Features.UserStreaks.Controller
         {
             _streakService = streakService;
         }
-        [HttpGet]
+        [HttpGet("me")]
         [Authorize]
         public async Task<IActionResult> GetAsync()
         {
@@ -30,7 +30,7 @@ namespace StudifyAPI.Features.UserStreaks.Controller
             });
         }
 
-        [HttpGet]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> UpdateAsync()
         {

@@ -1,7 +1,8 @@
 @StudifyAPI_HostAddress = https://localhost:7103
 
 // USER
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYWxpa0BnbWFpbC5jb20iLCJ1c2VySWQiOiIzIiwianRpIjoiYjM5YzBlNTMtZTBiOS00ZDEwLWJlODQtZjcxM2NlZjk3NTI0IiwiZXhwIjoxNzY0ODE5ODQxLCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.36bRCLokuZUiWJncZPu1BU9rUVRsvA_sjIGC4QOpRFA
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYWxpa0BnbWFpbC5jb20iLCJ1c2VySWQiOiI0IiwianRpIjoiMGNmZTUyNDQtM2EwZC00NzkyLTlkMDItZTNmMzUxMjcyZTA3IiwiZXhwIjoxNzY0ODI2NjQ5LCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.eYtOA_1Mn-V_NMCvCH884z_0Y5kgGX5d48z5X7l4tXY
+// Get all users
 GET {{StudifyAPI_HostAddress}}/api/users
 Authorization: Bearer {{token}}
 ###
@@ -50,8 +51,9 @@ Authorization: Bearer {{token}}
 ###
 
 // Logout
-GET {{StudifyAPI_HostAddress}}/api/users/me/logout
+POST {{StudifyAPI_HostAddress}}/api/users/me/logout
 Authorization: Bearer {{token}}
+
 ###
 
 
@@ -75,12 +77,13 @@ Authorization: Bearer {{token}}
 
 
 // Patch task
-@taskId=2
+@taskId=3
 PATCH {{StudifyAPI_HostAddress}}/api/tasks/{{taskId}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
 {
-  "isCompleted": true
+  "Title": "Malik lik",
+  "isCompleted": false
 }
 
 
@@ -91,10 +94,22 @@ DELETE {{StudifyAPI_HostAddress}}/api/tasks/{{taskId}}
 Authorization: Bearer {{token}}
 ###
 
-// Pomodro
+
+
+// POMODRO
 GET {{StudifyAPI_HostAddress}}/api/pomodoros
 Authorization: Bearer {{token}}
 ###
 
 
+// STREAKS
 
+// get current streak
+GET {{StudifyAPI_HostAddress}}/api/streaks/me
+Authorization: Bearer {{token}}
+###
+
+// update streak
+POST {{StudifyAPI_HostAddress}}/api/streaks
+Authorization: Bearer {{token}}
+###
