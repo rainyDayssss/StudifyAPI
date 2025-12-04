@@ -14,6 +14,7 @@ namespace StudifyAPI.Features.Users.Models
         public string Email { get; set; } = null!;
         [Required]
         public string Password { get; set; } = null!;
+        public bool IsOnline { get; set; }
         public UserStreak Streak { get; set; } = null!;
         public List<UserTask> Tasks { get; set; } = new();  
     }

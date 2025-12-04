@@ -43,12 +43,43 @@ namespace StudifyAPI.Features.Users.Repositories
 
         public async Task<User?> GetUserByEmailAsync(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await _context.Users
+                .Include(u => u.Streak)
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User?> GetUserByIdAsync(int id)
         {
-            return await _context.Users.FindAsync(id);
+            return await _context.Users
+                .Include(u => u.Streak)
+                .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<User?> LoginAsync(int userId)
+        {
+            var existingUser = await _context.Users
+                .Include(u => u.Streak)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+            if (existingUser is null) {
+                return null;
+            }
+            existingUser.IsOnline = true; // set IsOnline to true
+            await _context.SaveChangesAsync();
+            return existingUser;
+        }
+
+        public async Task<User?> LogoutAsync(int userId)
+        {
+            var existingUser = await _context.Users
+                .Include(u => u.Streak)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+            if (existingUser == null)
+            {
+                return null;
+            }
+            existingUser.IsOnline = false; // set IsOnline to false
+            await _context.SaveChangesAsync();
+            return existingUser;
         }
 
         public async Task<User?> PatchUserAsync(int id, UserPatchDTO userPatchDTO)

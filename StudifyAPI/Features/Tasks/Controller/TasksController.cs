@@ -6,6 +6,7 @@ using StudifyAPI.Features.Tasks.Model;
 using StudifyAPI.Features.Tasks.Service;
 using StudifyAPI.Shared;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace StudifyAPI.Features.Tasks.Controller
 {
@@ -51,15 +52,12 @@ namespace StudifyAPI.Features.Tasks.Controller
         {
             var userId = GetUserIdFromClaims();
             var createdTask = await _taskService.CreateTaskAsync(userId, taskCreateDTO);
-            return CreatedAtAction(
-                actionName: "Get",
-                routeValues: new { taskId = createdTask.Id },
-                value: new ResponseDTO<UserTask>
-                {
-                    Success = true,
-                    Message = "Task created successfully.",
-                    Data = createdTask
-                });
+            return Ok(new ResponseDTO<UserTask?> 
+            { 
+                Success = true, 
+                Message = "Task created successfully", 
+                Data = createdTask 
+            });
         }
 
         [HttpPatch("{taskId}")]
@@ -92,14 +90,8 @@ namespace StudifyAPI.Features.Tasks.Controller
         }
         private int GetUserIdFromClaims()
         {
-            var claim = User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value;
-
-            if (string.IsNullOrEmpty(claim))
-                throw new UnauthorizedAccessException("User ID claim missing in token.");
-
-            if (!int.TryParse(claim, out var userId))
-                throw new UnauthorizedAccessException("User ID claim is not a valid integer.");
-
+            if (!int.TryParse(User.FindFirst("userId")?.Value, out var userId))
+                throw new UnauthorizedAccessException("Invalid user token.");
             return userId;
         }
     }

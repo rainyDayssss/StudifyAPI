@@ -11,5 +11,7 @@ namespace StudifyAPI.Features.Users.Repositories
         public Task<User?> PatchUserAsync(int id, UserPatchDTO userPatchDTO); // patch update
         public Task<User?> DeleteUserAsync(int id);
         public Task<User?> GetUserByEmailAsync(string email);
+        public Task<User?> LogoutAsync(int userId);
+        public Task<User?> LoginAsync(int userId);
     }
 }
