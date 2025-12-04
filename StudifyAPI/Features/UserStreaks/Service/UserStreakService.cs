@@ -9,24 +9,16 @@ namespace StudifyAPI.Features.UserStreaks.Service
     public class UserStreakService : IUserStreakService
     {
         private readonly IUserStreakRepository _userStreakRepository;
-        private readonly IUserRepository _userRepository;
         public UserStreakService(IUserStreakRepository userStreakRepository, IUserRepository userRepository)
         {
             _userStreakRepository = userStreakRepository;
-            _userRepository = userRepository;
         }
 
         public async Task<UserStreakDTO> GetUserStreakByUserIdAsync(int userId)
         {
-            var existingUser = await _userRepository.GetUserByIdAsync(userId);
-            if (existingUser == null)
-            {
-                throw new UserNotFoundException("User not found"); // its better to check the user on user repo, then if not found, meaning there is also no streak
-            }
-
             var streak = await _userStreakRepository.GetByUserIdAsync(userId);
             if (streak is null) {
-                throw new StreakNotFoundException("Streak not found"); //TODO: a custom exception can be created here 
+                throw new StreakNotFoundException("Streak not found"); 
             }
             var userStreakDTO = new UserStreakDTO
             {
@@ -38,15 +30,9 @@ namespace StudifyAPI.Features.UserStreaks.Service
 
         public async Task<UserStreakDTO> UpdateUserStreaksAsync(int userId)
         {
-            var existingUser = await _userRepository.GetUserByIdAsync(userId);
-            if (existingUser == null)
-            {
-                throw new UserNotFoundException("User not found"); 
-            }
-
             var streak = await _userStreakRepository.GetByUserIdAsync(userId);
             if (streak is null) { // This will rarely happen
-                throw new StreakNotFoundException("User streak not found"); // TODO: create custom exception
+                throw new StreakNotFoundException("User streak not found"); 
             }
 
             // map streak to streakDTO

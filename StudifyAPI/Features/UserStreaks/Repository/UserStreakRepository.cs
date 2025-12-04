@@ -16,7 +16,7 @@ namespace StudifyAPI.Features.UserStreaks.Repository
         public async Task<UserStreak?> GetByUserIdAsync(int userId)
         {
             return await _context.UserStreaks
-               .Include(s => s.User) // optional: include navigation property
+               .Include(s => s.User) 
                .FirstOrDefaultAsync(s => s.UserId == userId);
         }
 

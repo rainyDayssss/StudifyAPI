@@ -40,7 +40,7 @@ namespace StudifyAPI.Features.Users.Services
                 Streak = new UserStreak()
                 {
                     CurrentStreakDays = 0, // default 
-                    LastUpdated = DateTime.MinValue
+                    LastUpdated = DateTime.UtcNow
                 }
             };
 
