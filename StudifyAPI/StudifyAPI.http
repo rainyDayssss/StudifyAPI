@@ -1,7 +1,7 @@
 @StudifyAPI_HostAddress = https://localhost:7103
 
 // USER
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYWxpa0BnbWFpbC5jb20iLCJ1c2VySWQiOiIzIiwianRpIjoiYzA2MjM2YWMtNWUxMy00YTI3LWE0NTQtMDA1ODM2YzM5MTNkIiwiZXhwIjoxNzY0NzQwMTY4LCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.fYDTJ7eQbGj7EF-05GwBgJq0jVmODWDc1M3CaeUJpOc
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYWxpa0BnbWFpbC5jb20iLCJ1c2VySWQiOiIzIiwianRpIjoiYjM5YzBlNTMtZTBiOS00ZDEwLWJlODQtZjcxM2NlZjk3NTI0IiwiZXhwIjoxNzY0ODE5ODQxLCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.36bRCLokuZUiWJncZPu1BU9rUVRsvA_sjIGC4QOpRFA
 GET {{StudifyAPI_HostAddress}}/api/users
 Authorization: Bearer {{token}}
 ###
@@ -34,8 +34,9 @@ DELETE {{StudifyAPI_HostAddress}}/api/users/me
 Authorization: Bearer {{token}}
 ###
 
-GET {{StudifyAPI_HostAddress}}/api/users/{{id}}
-
+// Get profile
+GET {{StudifyAPI_HostAddress}}/api/users/me
+Authorization: Bearer {{token}}
 ###
 
 // Update
@@ -48,13 +49,20 @@ Authorization: Bearer {{token}}
 
 ###
 
+// Logout
+GET {{StudifyAPI_HostAddress}}/api/users/me/logout
+Authorization: Bearer {{token}}
+###
+
+
+
 // TASK
 // Create task
 POST {{StudifyAPI_HostAddress}}/api/tasks
 Content-Type: application/json
 Authorization: Bearer {{token}}
 {
-  "Title": "Study math"
+  "Title": "Play pokemon"
 }
 
 ###
@@ -67,7 +75,7 @@ Authorization: Bearer {{token}}
 
 
 // Patch task
-@taskId=1
+@taskId=2
 PATCH {{StudifyAPI_HostAddress}}/api/tasks/{{taskId}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
@@ -83,7 +91,10 @@ DELETE {{StudifyAPI_HostAddress}}/api/tasks/{{taskId}}
 Authorization: Bearer {{token}}
 ###
 
-
+// Pomodro
 GET {{StudifyAPI_HostAddress}}/api/pomodoros
 Authorization: Bearer {{token}}
 ###
+
+
+

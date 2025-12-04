@@ -4,6 +4,7 @@ using StudifyAPI.Features.Users.Models;
 using StudifyAPI.Features.Users.Repositories;
 using StudifyAPI.Features.UserStreaks.Model;
 using StudifyAPI.Shared.Exceptions;
+using Microsoft.AspNetCore.Identity;
 
 namespace StudifyAPI.Features.Users.Services
 {
@@ -35,6 +36,7 @@ namespace StudifyAPI.Features.Users.Services
                 Lastname = userCreateDTO.Lastname,
                 Email = userCreateDTO.Email,
                 Password = userCreateDTO.Password,
+                IsOnline = false, // default
                 Streak = new UserStreak()
                 {
                     CurrentStreakDays = 0, // default 
@@ -52,6 +54,7 @@ namespace StudifyAPI.Features.Users.Services
                 Firstname = createdUser.Firstname,
                 Lastname = createdUser.Lastname,
                 Email = createdUser.Email,
+                IsOnline = createdUser.IsOnline,
                 CurrentStreakDays = createdUser.Streak.CurrentStreakDays
             };
 
@@ -69,6 +72,7 @@ namespace StudifyAPI.Features.Users.Services
                 Firstname = deletedUser.Firstname,
                 Lastname = deletedUser.Lastname,
                 Email = deletedUser.Email,
+                IsOnline = deletedUser.IsOnline,
                 CurrentStreakDays = deletedUser.Streak.CurrentStreakDays
             };
         }
@@ -83,6 +87,7 @@ namespace StudifyAPI.Features.Users.Services
                 Firstname = user.Firstname,
                 Lastname = user.Lastname,
                 Email = user.Email,
+                IsOnline = user.IsOnline,
                 CurrentStreakDays = user.Streak.CurrentStreakDays
             }).ToList();
             return userReadDTOs;
@@ -102,6 +107,7 @@ namespace StudifyAPI.Features.Users.Services
                 Firstname = existingUser.Firstname,
                 Lastname = existingUser.Lastname,
                 Email = existingUser.Email,
+                IsOnline = existingUser.IsOnline,
                 CurrentStreakDays = existingUser.Streak.CurrentStreakDays
             };
         }
@@ -118,20 +124,18 @@ namespace StudifyAPI.Features.Users.Services
                 Firstname = existingUser.Firstname,
                 Lastname = existingUser.Lastname,
                 Email = existingUser.Email,
+                IsOnline = existingUser.IsOnline,
                 CurrentStreakDays = existingUser.Streak.CurrentStreakDays
             };
         }
 
         public async Task<string> LoginAsync(UserLoginDTO userLoginDTO)
         {
+            // verify user exists
             var existingUser = await _userRepository.GetUserByEmailAsync(userLoginDTO.Email);
             if (existingUser is null)
             {
                 throw new UserNotFoundException("User not found");
-            }
-
-            if (!existingUser.Email.Equals(userLoginDTO.Email)) {
-                throw new InvalidEmailException("Invalid email");
             }
 
             // verify password
@@ -140,9 +144,27 @@ namespace StudifyAPI.Features.Users.Services
                 throw new InvalidPasswordException("Invalid password");
             }
 
-
+            // set user IsOnline to true
+            await _userRepository.LoginAsync(existingUser.Id);
             // return the mapped UserReadDTO
             return _jwtService.GenerateToken(existingUser.Email, existingUser.Id);
+        }
+
+        public async Task<UserReadDTO> LogoutAsync(int userId)
+        {
+            var existingUser = await _userRepository.LogoutAsync(userId);
+            if (existingUser is null) {
+                throw new UserNotFoundException("User not found");
+            }
+            return new UserReadDTO()
+            {
+                Id = existingUser.Id,
+                Firstname = existingUser.Firstname,
+                Lastname = existingUser.Lastname,
+                Email = existingUser.Email,
+                IsOnline = existingUser.IsOnline,
+                CurrentStreakDays = existingUser.Streak.CurrentStreakDays
+            };
         }
 
         public async Task<UserReadDTO> PatchUserAsync(int id, UserPatchDTO userPatchDTO)
@@ -157,6 +179,7 @@ namespace StudifyAPI.Features.Users.Services
                 Firstname = existingUser.Firstname,
                 Lastname = existingUser.Lastname,
                 Email = existingUser.Email,
+                IsOnline = existingUser.IsOnline,
                 CurrentStreakDays = existingUser.Streak.CurrentStreakDays
             };
         }

@@ -45,14 +45,8 @@ namespace StudifyAPI.Features.UserStreaks.Controller
 
         private int GetUserIdFromClaims()
         {
-            var claim = User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value;
-
-            if (string.IsNullOrEmpty(claim))
-                throw new UnauthorizedAccessException("User ID claim missing in token.");
-
-            if (!int.TryParse(claim, out var userId))
-                throw new UnauthorizedAccessException("User ID claim is not a valid integer.");
-
+            if (!int.TryParse(User.FindFirst("userId")?.Value, out var userId))
+                throw new UnauthorizedAccessException("Invalid user token.");
             return userId;
         }
     }

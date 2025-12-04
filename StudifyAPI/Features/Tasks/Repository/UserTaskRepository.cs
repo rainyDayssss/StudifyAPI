@@ -15,14 +15,8 @@ namespace StudifyAPI.Features.Tasks.Repository
         {
             _context = context;
         }
-        public async Task<UserTask> CreateTaskAsync(int userId, UserTask task)
+        public async Task<UserTask> CreateTaskAsync(UserTask task)
         {
-            var existingUser = await _context.Users.FindAsync(userId);
-            if (existingUser == null)
-            {
-                throw new UserNotFoundException("User not found"); // if the user was not logged in
-            }
-
             await _context.UserTasks.AddAsync(task);
             await _context.SaveChangesAsync();
             return task;

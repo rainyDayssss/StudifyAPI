@@ -1,4 +1,5 @@
-﻿using StudifyAPI.Features.Auth;
+﻿using Microsoft.EntityFrameworkCore.Query.Internal;
+using StudifyAPI.Features.Auth;
 using StudifyAPI.Features.Users.DTOs;
 using System.Globalization;
 
@@ -13,5 +14,6 @@ namespace StudifyAPI.Features.Users.Services
         public Task<UserReadDTO> DeleteUserAsync(int id);
         public Task<UserReadDTO> GetUserByEmailAsync(string email);
         public Task<string> LoginAsync(UserLoginDTO userLoginDTO);
+        public Task<UserReadDTO> LogoutAsync(int userId);   
     }
 }

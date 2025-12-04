@@ -1,4 +1,5 @@
-﻿using StudifyAPI.Shared;
+﻿using StudifyAPI.Features.UserStreaks.Model;
+using StudifyAPI.Shared;
 using StudifyAPI.Shared.Exceptions;
 using System.Net;
 using System.Text.Json;
@@ -33,12 +34,12 @@ namespace StudifyAPI.Shared.Middleware
                 case EmailAlreadyUsedException:
                     statusCode = HttpStatusCode.Conflict;
                     break;
-                case InvalidEmailException:
                 case InvalidPasswordException:
                     statusCode = HttpStatusCode.Unauthorized;
                     break;
                 case UserNotFoundException:
                 case TaskNotFoundException:
+                case StreakNotFoundException:
                     statusCode = HttpStatusCode.NotFound;
                     break;
                 default:

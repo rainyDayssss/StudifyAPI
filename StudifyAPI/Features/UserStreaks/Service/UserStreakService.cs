@@ -26,7 +26,7 @@ namespace StudifyAPI.Features.UserStreaks.Service
 
             var streak = await _userStreakRepository.GetByUserIdAsync(userId);
             if (streak is null) {
-                throw new Exception("Streak not found"); //TODO: a custom exception can be created here 
+                throw new StreakNotFoundException("Streak not found"); //TODO: a custom exception can be created here 
             }
             var userStreakDTO = new UserStreakDTO
             {
@@ -46,7 +46,7 @@ namespace StudifyAPI.Features.UserStreaks.Service
 
             var streak = await _userStreakRepository.GetByUserIdAsync(userId);
             if (streak is null) { // This will rarely happen
-                throw new Exception("User streak not found"); // TODO: create custom exception
+                throw new StreakNotFoundException("User streak not found"); // TODO: create custom exception
             }
 
             // map streak to streakDTO

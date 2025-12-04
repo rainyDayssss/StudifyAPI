@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudifyAPI.Features.Users.DTOs;
 using StudifyAPI.Features.Users.Services;
@@ -17,20 +16,32 @@ namespace StudifyAPI.Features.Users.Controllers
         {
             _userService = userService;
         }
-        // This could be just for testing purposes
+        // This could be just for testing purposes, in real life we might not want to expose all users.
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetAllAsync()
         {
-            return Ok(await _userService.GetAllUsersAsync());
+            return Ok(new ResponseDTO<List<UserReadDTO>>
+            {
+                Success = true,
+                Message = "Users retrieved successfully.",
+                Data = await _userService.GetAllUsersAsync()
+            });
         }
 
-        // This also could be just for testing 
-        [HttpGet("{id}")]
+        // Get Profile
+        [HttpGet("me")]
         [Authorize]
-        public async Task<IActionResult> GetAsync(int id)
+        public async Task<IActionResult> GetAsync()
         {
-            return Ok(await _userService.GetUserByIdAsync(id));
+            int userId = GetUserIdFromClaims();
+            var userProfile = await _userService.GetUserByIdAsync(userId);
+            return Ok(new ResponseDTO<UserReadDTO>
+            {
+                Success = true,
+                Message = "User profile retrieved successfully.",
+                Data = userProfile
+            });
         }
         
 
@@ -40,15 +51,12 @@ namespace StudifyAPI.Features.Users.Controllers
         public async Task<IActionResult> CreateAsync([FromBody] UserCreateDTO userCreateDTO)
         {
             var createdUser = await _userService.CreateUserAsync(userCreateDTO);
-            return CreatedAtAction(
-                actionName: "Get", 
-                routeValues: new { id = createdUser.Id },
-                value: new ResponseDTO<UserReadDTO> 
-                { 
-                    Success = true, 
-                    Message = "User created successfully.", 
-                    Data = createdUser 
-                });
+            return Ok(new ResponseDTO<UserReadDTO>
+            {
+                Success = true,
+                Message = "User created successfully.",
+                Data = createdUser
+            });
         }
 
         // Update the logged in user partially 
@@ -74,7 +82,7 @@ namespace StudifyAPI.Features.Users.Controllers
         // Delete logged in user
         [HttpDelete("me")]
         [Authorize]
-        public async Task<IActionResult> Delete()
+        public async Task<IActionResult> DeleteAsync()
         {
 
             int userId = GetUserIdFromClaims();
@@ -87,19 +95,27 @@ namespace StudifyAPI.Features.Users.Controllers
             });
         }
 
+        [HttpPost("me/logout")]
+        [Authorize]
+        public async Task<IActionResult> LogoutAsync()
+        {
+            int userId = GetUserIdFromClaims();
+            var logoutUser = await _userService.LogoutAsync(userId);
+
+            return Ok(new ResponseDTO<UserReadDTO>
+            {
+                Success = true,
+                Message = "Logged out successfully.",
+                Data = logoutUser
+            });
+        }
 
         // For logging out, let the client just delete the token on their side.
 
         private int GetUserIdFromClaims()
         {
-            var claim = User.Claims.FirstOrDefault(c => c.Type == "userId")?.Value;
-
-            if (string.IsNullOrEmpty(claim))
-                throw new UnauthorizedAccessException("User ID claim missing in token.");
-
-            if (!int.TryParse(claim, out var userId))
-                throw new UnauthorizedAccessException("User ID claim is not a valid integer.");
-
+            if (!int.TryParse(User.FindFirst("userId")?.Value, out var userId))
+                throw new UnauthorizedAccessException("Invalid user token.");
             return userId;
         }
     }
