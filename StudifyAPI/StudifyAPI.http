@@ -1,7 +1,8 @@
 @StudifyAPI_HostAddress = https://localhost:7103
 
 // USER
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYWxpa0BnbWFpbC5jb20iLCJ1c2VySWQiOiI0IiwianRpIjoiMGNmZTUyNDQtM2EwZC00NzkyLTlkMDItZTNmMzUxMjcyZTA3IiwiZXhwIjoxNzY0ODI2NjQ5LCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.eYtOA_1Mn-V_NMCvCH884z_0Y5kgGX5d48z5X7l4tXY
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYWxpa0BnbWFpbC5jb20iLCJ1c2VySWQiOiI0IiwianRpIjoiNTI3ZDA5M2UtZDE1Yi00NTFjLWI5MzItNjg3OWEyNDkyM2Y5IiwiZXhwIjoxNzY0ODUxMjIxLCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.NwjUirKD1cDi5TfCligDdJ2BmjBG29A2ZRgilRl_CsY
+
 // Get all users
 GET {{StudifyAPI_HostAddress}}/api/users
 Authorization: Bearer {{token}}
@@ -31,6 +32,7 @@ Content-Type: application/json
 
 ###
 
+// Delete user account
 DELETE {{StudifyAPI_HostAddress}}/api/users/me
 Authorization: Bearer {{token}}
 ###
@@ -64,7 +66,7 @@ POST {{StudifyAPI_HostAddress}}/api/tasks
 Content-Type: application/json
 Authorization: Bearer {{token}}
 {
-  "Title": "Play pokemon"
+  "Title": "Study Math"
 }
 
 ###
@@ -77,13 +79,12 @@ Authorization: Bearer {{token}}
 
 
 // Patch task
-@taskId=3
+@taskId=8
 PATCH {{StudifyAPI_HostAddress}}/api/tasks/{{taskId}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
 {
-  "Title": "Malik lik",
-  "isCompleted": false
+  "isCompleted": true
 }
 
 

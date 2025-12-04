@@ -10,8 +10,9 @@ namespace StudifyAPI.Features.Tasks.Model
         [Required]
         public string Title { get; set; } = null!;
         public bool IsCompleted { get; set; }
+        // public bool IsTaskActive { get; set; }
         public int UserId { get; set;}
         [JsonIgnore]
         public User User { get; set; } = null!;
-    }
+    } 
 }

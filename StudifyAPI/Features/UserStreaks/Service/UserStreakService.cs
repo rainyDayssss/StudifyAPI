@@ -14,21 +14,21 @@ namespace StudifyAPI.Features.UserStreaks.Service
             _userStreakRepository = userStreakRepository;
         }
 
-        public async Task<UserStreakDTO> GetUserStreakByUserIdAsync(int userId)
+        public async Task<UserStreakReadDTO> GetUserStreakByUserIdAsync(int userId)
         {
             var streak = await _userStreakRepository.GetByUserIdAsync(userId);
             if (streak is null) {
                 throw new StreakNotFoundException("Streak not found"); 
             }
-            var userStreakDTO = new UserStreakDTO
+            var userStreakDTO = new UserStreakReadDTO
             {
                 CurrentStreakDays = streak.CurrentStreakDays,
                 LastUpdated = streak.LastUpdated
             };
             return userStreakDTO;
         }
-
-        public async Task<UserStreakDTO> UpdateUserStreaksAsync(int userId)
+        // you must update this after user had spend maybe 25 mins using the app
+        public async Task<UserStreakReadDTO> UpdateUserStreaksAsync(int userId)
         {
             var streak = await _userStreakRepository.GetByUserIdAsync(userId);
             if (streak is null) { // This will rarely happen
@@ -36,7 +36,7 @@ namespace StudifyAPI.Features.UserStreaks.Service
             }
 
             // map streak to streakDTO
-            var streakDTO = new UserStreakDTO
+            var streakDTO = new UserStreakReadDTO
             {
                 CurrentStreakDays = streak.CurrentStreakDays,
                 LastUpdated = streak.LastUpdated

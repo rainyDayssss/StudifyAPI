@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using StudifyAPI.Features.FriendRequests.Model;
 using StudifyAPI.Features.Tasks.Model;
 using StudifyAPI.Features.UserStreaks.Model;
 namespace StudifyAPI.Features.Users.Models
@@ -17,5 +18,9 @@ namespace StudifyAPI.Features.Users.Models
         public bool IsOnline { get; set; }
         public UserStreak Streak { get; set; } = null!;
         public List<UserTask> Tasks { get; set; } = new();  
+        public List<FriendRequest> SentFriendRequests { get; set; } = new();
+        public List<FriendRequest> ReceivedFriendRequests { get; set; } = new();
+
+
     }
 }

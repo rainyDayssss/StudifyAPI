@@ -5,7 +5,7 @@ namespace StudifyAPI.Features.UserStreaks.Service
 {
     public interface IUserStreakService
     {
-        public Task<UserStreakDTO> GetUserStreakByUserIdAsync(int userId);
-        public Task<UserStreakDTO>UpdateUserStreaksAsync(int userId);
+        public Task<UserStreakReadDTO> GetUserStreakByUserIdAsync(int userId);
+        public Task<UserStreakReadDTO>UpdateUserStreaksAsync(int userId);
     }
 }
