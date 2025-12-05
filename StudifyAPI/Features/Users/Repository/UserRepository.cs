@@ -23,13 +23,21 @@ namespace StudifyAPI.Features.Users.Repositories
         {
             var existingUser = await _context.Users
                 .Include(u => u.Streak)
+                .Include(u => u.Tasks)
+                .Include(u => u.SentFriendRequests)
+                .Include(u => u.ReceivedFriendRequests)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             if (existingUser == null)
-            {
                 return null;
-            }
+
+            // Remove friend requests first because of Restrict
+            _context.FriendRequests.RemoveRange(existingUser.SentFriendRequests);
+            _context.FriendRequests.RemoveRange(existingUser.ReceivedFriendRequests);
+
+            // Tasks and Streak will cascade automatically
             _context.Users.Remove(existingUser);
+
             await _context.SaveChangesAsync();
             return existingUser;
         }

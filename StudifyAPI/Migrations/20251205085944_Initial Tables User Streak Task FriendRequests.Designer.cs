@@ -12,8 +12,8 @@ using StudifyAPI.Shared.Database;
 namespace StudifyAPI.Migrations
 {
     [DbContext(typeof(StudifyDbContext))]
-    [Migration("20251202190143_Initialize User, Task, Streak, tables")]
-    partial class InitializeUserTaskStreaktables
+    [Migration("20251205085944_Initial Tables User Streak Task FriendRequests")]
+    partial class InitialTablesUserStreakTaskFriendRequests
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,30 @@ namespace StudifyAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("StudifyAPI.Features.FriendRequests.Model.FriendRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId", "ReceiverId")
+                        .IsUnique();
+
+                    b.ToTable("FriendRequests");
+                });
 
             modelBuilder.Entity("StudifyAPI.Features.Tasks.Model.UserTask", b =>
                 {
@@ -82,6 +106,9 @@ namespace StudifyAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsOnline")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Lastname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -96,6 +123,25 @@ namespace StudifyAPI.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("StudifyAPI.Features.FriendRequests.Model.FriendRequest", b =>
+                {
+                    b.HasOne("StudifyAPI.Features.Users.Models.User", "Receiver")
+                        .WithMany("ReceivedFriendRequests")
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("StudifyAPI.Features.Users.Models.User", "Sender")
+                        .WithMany("SentFriendRequests")
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("StudifyAPI.Features.Tasks.Model.UserTask", b =>
@@ -122,6 +168,10 @@ namespace StudifyAPI.Migrations
 
             modelBuilder.Entity("StudifyAPI.Features.Users.Models.User", b =>
                 {
+                    b.Navigation("ReceivedFriendRequests");
+
+                    b.Navigation("SentFriendRequests");
+
                     b.Navigation("Streak")
                         .IsRequired();
 

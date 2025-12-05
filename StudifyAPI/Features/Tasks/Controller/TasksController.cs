@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace StudifyAPI.Features.Tasks.Controller
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TasksController : ControllerBase
@@ -21,7 +22,6 @@ namespace StudifyAPI.Features.Tasks.Controller
         }
 
         [HttpGet("me")]
-        [Authorize]
         public async Task<IActionResult> GetAllAsync()
         {
             var userId = GetUserIdFromClaims();
@@ -34,7 +34,6 @@ namespace StudifyAPI.Features.Tasks.Controller
         }
 
         [HttpGet("{taskId}")]
-        [Authorize]
         public async Task<IActionResult> GetAsync(int taskId)
         {
             var userId = GetUserIdFromClaims();
@@ -47,7 +46,6 @@ namespace StudifyAPI.Features.Tasks.Controller
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> CreateAsync([FromBody] UserTaskCreateDTO taskCreateDTO)
         {
             var userId = GetUserIdFromClaims();
@@ -61,7 +59,6 @@ namespace StudifyAPI.Features.Tasks.Controller
         }
 
         [HttpPatch("{taskId}")]
-        [Authorize]
         public async Task<IActionResult> PatchAsync(int taskId, [FromBody] UserTaskPatchDTO taskPatchDTO)
         {
             var userId = GetUserIdFromClaims();
@@ -75,7 +72,6 @@ namespace StudifyAPI.Features.Tasks.Controller
         }
 
         [HttpDelete("{taskId}")]
-        [Authorize]
         public async Task<IActionResult> DeleteAsync(int taskId)
         {
             var userId = GetUserIdFromClaims();

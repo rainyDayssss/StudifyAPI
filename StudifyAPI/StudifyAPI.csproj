@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\FriendRequests\Controller\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
