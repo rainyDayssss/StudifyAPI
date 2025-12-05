@@ -40,13 +40,13 @@ namespace StudifyAPI.Shared.Database
                 .HasMany(u => u.SentFriendRequests)
                 .WithOne(fr => fr.Sender)
                 .HasForeignKey(fr => fr.SenderId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             
             modelBuilder.Entity<User>()
                 .HasMany(u => u.ReceivedFriendRequests)
                 .WithOne(fr => fr.Receiver)
                 .HasForeignKey(fr => fr.ReceiverId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<FriendRequest>()
                 .HasIndex(fr => new { fr.SenderId, fr.ReceiverId })

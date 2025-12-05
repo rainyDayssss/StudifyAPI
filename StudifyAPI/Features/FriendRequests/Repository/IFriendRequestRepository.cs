@@ -5,18 +5,24 @@ namespace StudifyAPI.Features.FriendRequests.Repository
     public interface IFriendRequestRepository
     {
         // Send request
-        public Task<FriendRequest> CreateFriendRequestAsysnc(FriendRequest friendRequest);
+        public Task<FriendRequest> CreateFriendRequestAsync(FriendRequest friendRequest);
+        // Get a specific sent request between two users
+        public Task<FriendRequest?> GetFriendRequestBetweenUsersAsync(int senderId, int receiverId);
 
         // Get all sent requests for a user
-        public Task<List<FriendRequest>> GetAllSentRequestsAsync(int userId);
+        public Task<List<FriendRequest>> GetAllSentRequestsAsync(int senderId);
         
         // Get all receive requests for a user
-        public Task<List<FriendRequest>> GetAllReceivedRequestsAsync(int userId);
+        public Task<List<FriendRequest>> GetAllReceivedRequestsAsync(int receiverId);
 
-        // Cancel sent request,  senderId = logged in user
-        public Task<FriendRequest?> DeleteFriendRequestAsync(int senderId, int receiverId);
+        // Cancel sent request
+        public Task<FriendRequest?> CancelFriendRequestAsync(int requestId, int userId);
 
-        // Accept request,  receiverId = logged in user
-        public Task<FriendRequest?> AcceptFriendRequestAsync(int senderId, int receiverId);
+        // Reject received request
+        public Task<FriendRequest?> RejectFriendRequestAsync(int requestId, int userId);
+
+        // Accept request
+        public Task<FriendRequest?> AcceptFriendRequestAsync(int requestId, int userId);
+
     }
 }

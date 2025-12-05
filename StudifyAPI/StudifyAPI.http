@@ -1,7 +1,7 @@
 @StudifyAPI_HostAddress = https://localhost:7103
 
 // USER
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYWxpa0BnbWFpbC5jb20iLCJ1c2VySWQiOiI0IiwianRpIjoiNTI3ZDA5M2UtZDE1Yi00NTFjLWI5MzItNjg3OWEyNDkyM2Y5IiwiZXhwIjoxNzY0ODUxMjIxLCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.NwjUirKD1cDi5TfCligDdJ2BmjBG29A2ZRgilRl_CsY
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW1hd0BnbWFpbC5jb20iLCJ1c2VySWQiOiIyIiwianRpIjoiMmE3ZTEwNWItZTk0NS00MjcxLWJjOWUtMGYzNGU3OTQyNjA4IiwiZXhwIjoxNzY0OTI4NDcxLCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.CHU77HgFb7Hg8JjDXpklWE_Qw_z7W48Wq7DsybbZQrQ
 
 // Get all users
 GET {{StudifyAPI_HostAddress}}/api/users
@@ -13,10 +13,10 @@ POST {{StudifyAPI_HostAddress}}/api/users
 Content-Type: application/json
 
 {
-  "Firstname": "malik",
-  "Lastname": "Talisic",
-  "Email": "malik@gmail.com",
-  "Password": "maliklik"
+  "Firstname": "ducay",
+  "Lastname": "mamaw",
+  "Email": "mamaw@gmail.com",
+  "Password": "mamaw123"
 }
 
 ###
@@ -26,8 +26,8 @@ POST {{StudifyAPI_HostAddress}}/api/auth/login
 Content-Type: application/json
 
 {
-  "Email": "malik@gmail.com",
-  "Password": "maliklik"
+  "Email": "mamaw@gmail.com",
+  "Password": "mamaw123"
 } 
 
 ###
@@ -66,7 +66,7 @@ POST {{StudifyAPI_HostAddress}}/api/tasks
 Content-Type: application/json
 Authorization: Bearer {{token}}
 {
-  "Title": "Study Math"
+  "Title": "Study Science"
 }
 
 ###
@@ -113,4 +113,31 @@ Authorization: Bearer {{token}}
 // update streak
 POST {{StudifyAPI_HostAddress}}/api/streaks
 Authorization: Bearer {{token}}
+###
+
+// FRIEND REQUESTS
+
+// Get all sent requests
+GET {{StudifyAPI_HostAddress}}/api/friendrequests/sent/me
+Authorization: Bearer {{token}}
+###
+
+// Get all receive requests
+GET {{StudifyAPI_HostAddress}}/api/friendrequests/received/me
+Authorization: Bearer {{token}}
+###
+
+// Accepting request
+@requestId=0
+POST {{StudifyAPI_HostAddress}}/api/friendrequests/{{requestId}}/accept
+Authorization: Bearer {{token}}
+###
+
+POST {{StudifyAPI_HostAddress}}/api/friendrequests
+Content-Type: application/json
+Authorization: Bearer {{token}}
+{
+  "Email": "mamaww@gmail.com"
+}
+
 ###

@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StudifyAPI.Features.Auth;
+using StudifyAPI.Features.FriendRequests.Repository;
+using StudifyAPI.Features.FriendRequests.Service;
 using StudifyAPI.Features.Pomodoro.Service;
 using StudifyAPI.Features.Tasks.Repository;
 using StudifyAPI.Features.Tasks.Service;
@@ -48,6 +50,8 @@ builder.Services.AddScoped<IUserStreakService, UserStreakService>();
 builder.Services.AddScoped<IUserTaskRepository, UserTaskRepository>();
 builder.Services.AddScoped<IUserTaskService, UserTaskService>();
 builder.Services.AddScoped<IPomodoroService, PomodoroService>();
+builder.Services.AddScoped<IFriendRequestRepository, FriendRequestRepository>();
+builder.Services.AddScoped<IFriendRequestService, FriendRequestService>();
 builder.Services.AddSingleton<JwtService>();
 
 builder.Services.AddControllers();
