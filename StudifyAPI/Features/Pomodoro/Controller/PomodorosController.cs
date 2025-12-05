@@ -7,6 +7,7 @@ using StudifyAPI.Shared;
 
 namespace StudifyAPI.Features.Pomodoro.Controller
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PomodorosController : ControllerBase
@@ -19,7 +20,6 @@ namespace StudifyAPI.Features.Pomodoro.Controller
 
         // Get the three default pomodoros
         [HttpGet]
-        [Authorize]
         public  IActionResult GetDefault()
         {
             return Ok (new ResponseDTO<List<PomodoroDTO>>

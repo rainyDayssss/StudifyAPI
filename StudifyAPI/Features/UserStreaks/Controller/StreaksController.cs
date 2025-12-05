@@ -8,6 +8,7 @@ using StudifyAPI.Shared;
 
 namespace StudifyAPI.Features.UserStreaks.Controller
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class StreaksController : ControllerBase
@@ -18,7 +19,6 @@ namespace StudifyAPI.Features.UserStreaks.Controller
             _streakService = streakService;
         }
         [HttpGet("me")]
-        [Authorize]
         public async Task<IActionResult> GetAsync()
         {
             var userId = GetUserIdFromClaims();
@@ -31,7 +31,6 @@ namespace StudifyAPI.Features.UserStreaks.Controller
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> UpdateAsync()
         {
             var userId = GetUserIdFromClaims();

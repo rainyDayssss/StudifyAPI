@@ -1,7 +1,7 @@
 @StudifyAPI_HostAddress = https://localhost:7103
 
 // USER
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW1hd0BnbWFpbC5jb20iLCJ1c2VySWQiOiIyIiwianRpIjoiMmE3ZTEwNWItZTk0NS00MjcxLWJjOWUtMGYzNGU3OTQyNjA4IiwiZXhwIjoxNzY0OTI4NDcxLCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.CHU77HgFb7Hg8JjDXpklWE_Qw_z7W48Wq7DsybbZQrQ
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW1hd0BnbWFpbC5jb20iLCJ1c2VySWQiOiIyIiwianRpIjoiYjUzMGVmNGItNWZmMS00YWI5LWI1YzUtN2MxODA3NWQ1MGQ1IiwiZXhwIjoxNzY0OTMzNTkwLCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.4tPFmXUj-_eI0R3ssFhM7BDSYbv8R1qs-EXQGADqvFY
 
 // Get all users
 GET {{StudifyAPI_HostAddress}}/api/users
@@ -115,6 +115,8 @@ POST {{StudifyAPI_HostAddress}}/api/streaks
 Authorization: Bearer {{token}}
 ###
 
+
+
 // FRIEND REQUESTS
 
 // Get all sent requests
@@ -127,17 +129,29 @@ GET {{StudifyAPI_HostAddress}}/api/friendrequests/received/me
 Authorization: Bearer {{token}}
 ###
 
-// Accepting request
-@requestId=0
-POST {{StudifyAPI_HostAddress}}/api/friendrequests/{{requestId}}/accept
-Authorization: Bearer {{token}}
-###
 
+
+// Send request using email
 POST {{StudifyAPI_HostAddress}}/api/friendrequests
 Content-Type: application/json
 Authorization: Bearer {{token}}
 {
-  "Email": "mamaww@gmail.com"
+  "Email": "jerhon@gmail.com"
 }
 
+###
+
+// Accepting received request (To be implemented)
+POST {{StudifyAPI_HostAddress}}/api/friendrequests/1/accept
+Authorization: Bearer {{token}}
+###
+
+// Reject received request
+DELETE {{StudifyAPI_HostAddress}}/api/friendrequests/3/reject
+Authorization: Bearer {{token}}
+###
+
+// Cancel sent request
+DELETE {{StudifyAPI_HostAddress}}/api/friendrequests/3/cancel
+Authorization: Bearer {{token}}
 ###

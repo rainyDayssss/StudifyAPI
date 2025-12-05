@@ -7,6 +7,7 @@ using StudifyAPI.Shared;
 
 namespace StudifyAPI.Features.Users.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -18,7 +19,6 @@ namespace StudifyAPI.Features.Users.Controllers
         }
         // This could be just for testing purposes, in real life we might not want to expose all users.
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetAllAsync()
         {
             return Ok(new ResponseDTO<List<UserReadDTO>>
@@ -31,7 +31,6 @@ namespace StudifyAPI.Features.Users.Controllers
 
         // Get Profile
         [HttpGet("me")]
-        [Authorize]
         public async Task<IActionResult> GetAsync()
         {
             int userId = GetUserIdFromClaims();
@@ -46,7 +45,6 @@ namespace StudifyAPI.Features.Users.Controllers
 
         // search by using email // test foe the new git local account
         [HttpGet("{email}")]
-        [Authorize]
         public async Task<IActionResult> GetByEmailAsync(string email)
         {
             var user = await _userService.GetUserByEmailAsync(email);
@@ -73,7 +71,6 @@ namespace StudifyAPI.Features.Users.Controllers
 
         // Update the logged in user partially 
         [HttpPatch("me")]
-        [Authorize]
         public async Task<IActionResult> PatchAsync([FromBody] UserPatchDTO userPatchDTO) {
             foreach (var c in User.Claims)
             {
@@ -93,7 +90,6 @@ namespace StudifyAPI.Features.Users.Controllers
 
         // Delete logged in user
         [HttpDelete("me")]
-        [Authorize]
         public async Task<IActionResult> DeleteAsync()
         {
 
@@ -107,8 +103,8 @@ namespace StudifyAPI.Features.Users.Controllers
             });
         }
 
+        // For logging out, let the client just delete the token on their side.
         [HttpPost("me/logout")]
-        [Authorize]
         public async Task<IActionResult> LogoutAsync()
         {
             int userId = GetUserIdFromClaims();
@@ -122,8 +118,7 @@ namespace StudifyAPI.Features.Users.Controllers
             });
         }
 
-        // For logging out, let the client just delete the token on their side.
-
+        
         private int GetUserIdFromClaims()
         {
             if (!int.TryParse(User.FindFirst("userId")?.Value, out var userId))
