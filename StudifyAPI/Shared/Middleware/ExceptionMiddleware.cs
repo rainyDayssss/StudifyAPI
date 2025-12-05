@@ -32,6 +32,8 @@ namespace StudifyAPI.Shared.Middleware
             switch (ex)
             {
                 case EmailAlreadyUsedException:
+                case CannotFriendYourselfException:
+                case FriendAlreadyExistException:
                     statusCode = HttpStatusCode.Conflict;
                     break;
                 case InvalidPasswordException:
@@ -41,6 +43,7 @@ namespace StudifyAPI.Shared.Middleware
                 case TaskNotFoundException:
                 case StreakNotFoundException:
                 case FriendRequestNotFoundException:
+                case FriendNotFoundException:
                     statusCode = HttpStatusCode.NotFound;
                     break;
                 default:

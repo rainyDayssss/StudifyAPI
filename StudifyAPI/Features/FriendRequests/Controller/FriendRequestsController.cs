@@ -84,6 +84,7 @@ namespace StudifyAPI.Features.FriendRequests.Controller
             });
         }
 
+        // Reject received request
         [HttpDelete("{requestId}/reject")]
         public async Task<IActionResult> RejectAsync(int requestId) {
             var userId = GetUserIdFromClaims();

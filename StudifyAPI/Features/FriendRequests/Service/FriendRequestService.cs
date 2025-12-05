@@ -33,7 +33,9 @@ namespace StudifyAPI.Features.FriendRequests.Service
             var cancelledRequest = new FriendRequestReadDTO
             {
                 Id = sentRequest.Id,
+                SenderId = sentRequest.SenderId,
                 SenderFirstName = sentRequest.Sender.Firstname,
+                ReceiverId = sentRequest.ReceiverId,
                 ReceiverFirstName = sentRequest.Receiver.Firstname
             };
             return cancelledRequest;
@@ -45,7 +47,9 @@ namespace StudifyAPI.Features.FriendRequests.Service
             var receivedFriendRequestDTOs = receivedFriendRequests.Select(fr => new FriendRequestReadDTO
             {
                 Id = fr.Id,
+                SenderId = fr.SenderId,
                 SenderFirstName = fr.Sender.Firstname,
+                ReceiverId = fr.ReceiverId,
                 ReceiverFirstName = fr.Receiver.Firstname
             }).ToList();
             return receivedFriendRequestDTOs;
@@ -57,7 +61,9 @@ namespace StudifyAPI.Features.FriendRequests.Service
             var sentFriendRequestDTOs = sentFriendRequests.Select(fr => new FriendRequestReadDTO
             {
                 Id = fr.Id,
+                SenderId = fr.SenderId,
                 SenderFirstName = fr.Sender.Firstname,
+                ReceiverId = fr.ReceiverId,
                 ReceiverFirstName = fr.Receiver.Firstname
             }).ToList();
             return sentFriendRequestDTOs;
@@ -119,8 +125,8 @@ namespace StudifyAPI.Features.FriendRequests.Service
             {
                 Id = sentRequest.Id,
                 SenderId = sentRequest.SenderId,
-                ReceiverId = sentRequest.ReceiverId,
                 SenderFirstName = sentRequest.Sender.Firstname,
+                ReceiverId = sentRequest.ReceiverId,
                 ReceiverFirstName = sentRequest.Receiver.Firstname
             };
 

@@ -1,6 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using StudifyAPI.Features.FriendRequests.Model;
+using StudifyAPI.Features.Friends.Model;
 using StudifyAPI.Features.Tasks.Model;
 using StudifyAPI.Features.UserStreaks.Model;
 namespace StudifyAPI.Features.Users.Models
@@ -20,7 +21,8 @@ namespace StudifyAPI.Features.Users.Models
         public List<UserTask> Tasks { get; set; } = new();  
         public List<FriendRequest> SentFriendRequests { get; set; } = new();
         public List<FriendRequest> ReceivedFriendRequests { get; set; } = new();
-
+        public List<Friend> FriendsAsUserA { get; set; } = new();
+        public List<Friend> FriendsAsUserB { get; set; } = new();
 
     }
 }

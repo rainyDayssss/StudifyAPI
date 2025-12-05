@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StudifyAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialTablesUserStreakTaskFriendRequests : Migration
+    public partial class AddedUserStreakTaskPomodoroFriendtable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,6 +49,30 @@ namespace StudifyAPI.Migrations
                     table.ForeignKey(
                         name: "FK_FriendRequests_Users_SenderId",
                         column: x => x.SenderId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Friends",
+                columns: table => new
+                {
+                    UserAId = table.Column<int>(type: "int", nullable: false),
+                    UserBId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Friends", x => new { x.UserAId, x.UserBId });
+                    table.ForeignKey(
+                        name: "FK_Friends_Users_UserAId",
+                        column: x => x.UserAId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Friends_Users_UserBId",
+                        column: x => x.UserBId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -106,6 +130,11 @@ namespace StudifyAPI.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Friends_UserBId",
+                table: "Friends",
+                column: "UserBId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
@@ -122,6 +151,9 @@ namespace StudifyAPI.Migrations
         {
             migrationBuilder.DropTable(
                 name: "FriendRequests");
+
+            migrationBuilder.DropTable(
+                name: "Friends");
 
             migrationBuilder.DropTable(
                 name: "UserStreaks");

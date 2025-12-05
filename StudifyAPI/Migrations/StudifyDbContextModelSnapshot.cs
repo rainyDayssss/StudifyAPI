@@ -46,6 +46,21 @@ namespace StudifyAPI.Migrations
                     b.ToTable("FriendRequests");
                 });
 
+            modelBuilder.Entity("StudifyAPI.Features.Friends.Model.Friend", b =>
+                {
+                    b.Property<int>("UserAId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserBId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserAId", "UserBId");
+
+                    b.HasIndex("UserBId");
+
+                    b.ToTable("Friends");
+                });
+
             modelBuilder.Entity("StudifyAPI.Features.Tasks.Model.UserTask", b =>
                 {
                     b.Property<int>("Id")
@@ -141,6 +156,25 @@ namespace StudifyAPI.Migrations
                     b.Navigation("Sender");
                 });
 
+            modelBuilder.Entity("StudifyAPI.Features.Friends.Model.Friend", b =>
+                {
+                    b.HasOne("StudifyAPI.Features.Users.Models.User", "UserA")
+                        .WithMany("FriendsAsUserA")
+                        .HasForeignKey("UserAId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("StudifyAPI.Features.Users.Models.User", "UserB")
+                        .WithMany("FriendsAsUserB")
+                        .HasForeignKey("UserBId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("UserA");
+
+                    b.Navigation("UserB");
+                });
+
             modelBuilder.Entity("StudifyAPI.Features.Tasks.Model.UserTask", b =>
                 {
                     b.HasOne("StudifyAPI.Features.Users.Models.User", "User")
@@ -165,6 +199,10 @@ namespace StudifyAPI.Migrations
 
             modelBuilder.Entity("StudifyAPI.Features.Users.Models.User", b =>
                 {
+                    b.Navigation("FriendsAsUserA");
+
+                    b.Navigation("FriendsAsUserB");
+
                     b.Navigation("ReceivedFriendRequests");
 
                     b.Navigation("SentFriendRequests");
