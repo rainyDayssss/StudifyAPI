@@ -14,12 +14,7 @@ namespace StudifyAPI.Features.FriendRequests.Repository
         {
             _context = context;
         }
-        public Task<FriendRequest?> AcceptFriendRequestAsync(int requestId, int userId)
-        {
-            // delete the friend request and create a friend relation
-            // this will talk to the friends repository to create a friend relation
-            throw new NotImplementedException(); 
-        }
+        
 
         public async Task<FriendRequest> CreateFriendRequestAsync(FriendRequest friendRequest)
         {
@@ -90,6 +85,18 @@ namespace StudifyAPI.Features.FriendRequests.Repository
                     (fr.ReceiverId == senderId && fr.SenderId == receiverId)            
                 );
                 
+            return friendRequest;
+        }
+
+        public async Task<FriendRequest?> GetFriendRequestAsync(int requestId)
+        {
+            return await _context.FriendRequests.FindAsync(requestId);
+        }
+
+        public async Task<FriendRequest?> DeleteFriendRequestAsync(FriendRequest friendRequest)
+        {
+            _context.FriendRequests.Remove(friendRequest);
+            await _context.SaveChangesAsync();
             return friendRequest;
         }
     }
