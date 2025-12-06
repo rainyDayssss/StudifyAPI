@@ -1,7 +1,7 @@
 @StudifyAPI_HostAddress = https://localhost:7103
 
 // USER
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYW1hd0BnbWFpbC5jb20iLCJ1c2VySWQiOiIyIiwianRpIjoiYjUzMGVmNGItNWZmMS00YWI5LWI1YzUtN2MxODA3NWQ1MGQ1IiwiZXhwIjoxNzY0OTMzNTkwLCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.4tPFmXUj-_eI0R3ssFhM7BDSYbv8R1qs-EXQGADqvFY
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJHYWJ1dGFuQGdtYWlsLmNvbSIsInVzZXJJZCI6IjIiLCJqdGkiOiIyZjY4OTFhMi04NTFmLTQ5NTEtYTBlZi1kYjMzM2QzMmIwN2IiLCJleHAiOjE3NjUwMzg0ODQsImlzcyI6IlN0dWRpZnlBUEkiLCJhdWQiOiJTdHVkaWZ5VXNlcnMifQ.QRN9BXjOAX9LVwHbujAyDruSAZvjJiJpCX5v1Csdc2Y
 
 // Get all users
 GET {{StudifyAPI_HostAddress}}/api/users
@@ -13,10 +13,10 @@ POST {{StudifyAPI_HostAddress}}/api/users
 Content-Type: application/json
 
 {
-  "Firstname": "ducay",
-  "Lastname": "mamaw",
-  "Email": "mamaw@gmail.com",
-  "Password": "mamaw123"
+  "Firstname": "Haggai",
+  "Lastname": "Estavilla",
+  "Email": "Haggai@gmail.com",
+  "Password": "ducay123"
 }
 
 ###
@@ -26,8 +26,8 @@ POST {{StudifyAPI_HostAddress}}/api/auth/login
 Content-Type: application/json
 
 {
-  "Email": "mamaw@gmail.com",
-  "Password": "mamaw123"
+  "Email": "Gabutan@gmail.com",
+  "Password": "ducay123"
 } 
 
 ###
@@ -136,22 +136,40 @@ POST {{StudifyAPI_HostAddress}}/api/friendrequests
 Content-Type: application/json
 Authorization: Bearer {{token}}
 {
-  "Email": "jerhon@gmail.com"
+  "Email": "ducay@gmail.com"
 }
 
-###
+###s
 
-// Accepting received request (To be implemented)
-POST {{StudifyAPI_HostAddress}}/api/friendrequests/1/accept
+// Accepting received request (To be implemented, just pass the request id
+POST {{StudifyAPI_HostAddress}}/api/friendrequests/7/accept
 Authorization: Bearer {{token}}
 ###
 
-// Reject received request
-DELETE {{StudifyAPI_HostAddress}}/api/friendrequests/3/reject
+// Reject received request, just pass the request id
+DELETE {{StudifyAPI_HostAddress}}/api/friendrequests/2/reject
 Authorization: Bearer {{token}}
 ###
 
-// Cancel sent request
-DELETE {{StudifyAPI_HostAddress}}/api/friendrequests/3/cancel
+// Cancel sent request, just pass the request id
+DELETE {{StudifyAPI_HostAddress}}/api/friendrequests/6/cancel
+Authorization: Bearer {{token}}
+###
+
+
+// FRIENDS 
+
+// Get user's all friends
+GET {{StudifyAPI_HostAddress}}/api/friends
+Authorization: Bearer {{token}}
+###
+
+// Unfriend
+DELETE {{StudifyAPI_HostAddress}}/api/friends/1
+Authorization: Bearer {{token}}
+###
+
+// Get specific friend
+GET {{StudifyAPI_HostAddress}}/api/friends/2
 Authorization: Bearer {{token}}
 ###

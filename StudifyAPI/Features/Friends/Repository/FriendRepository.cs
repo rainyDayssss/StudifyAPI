@@ -57,10 +57,6 @@ namespace StudifyAPI.Features.Friends.Repository
                     (f.UserAId == userId && f.UserBId == friendId) ||
                     (f.UserAId == friendId && f.UserBId == userId));
 
-            if (friend is null)
-            {
-                return null;
-            }
             return friend;
         }
     }

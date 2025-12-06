@@ -21,7 +21,7 @@ namespace StudifyAPI.Features.Friends.Service
             // Get the created friend
             var createdFriend = await _friendRepository.AddFriendAsync(friend);
 
-            if (createdFriend is null) 
+            if (createdFriend is null) // TODO: this should be not null 
             {
                 throw new FriendAlreadyExistException("Friendship already exist."); 
             }
@@ -66,7 +66,8 @@ namespace StudifyAPI.Features.Friends.Service
         {
             var friends = await _friendRepository.GetAllFriendsAsync(userId);
 
-            var friendDTOs = friends.Select(f => {
+            var friendDTOs = friends.Select(f => 
+            {
                 var friendUser = f.UserAId == userId ? f.UserB : f.UserA;
 
                 return new FriendReadDTO
@@ -88,10 +89,11 @@ namespace StudifyAPI.Features.Friends.Service
             var friend = await _friendRepository.GetFriendAsync(aId, bId);
             if (friend is null) 
             {
+                Console.WriteLine(aId + " " + bId);
                 throw new FriendNotFoundException("Friend not found");
             }
 
-            var friendUser = friend.UserAId == userId ? friend.UserB : friend.UserA; 
+            var friendUser = friend.UserAId == userId ? friend.UserB : friend.UserA;
 
             var friendDTO = new FriendReadDTO
             {

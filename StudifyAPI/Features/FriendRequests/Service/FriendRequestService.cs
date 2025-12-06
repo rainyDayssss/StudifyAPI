@@ -1,6 +1,10 @@
 ﻿using StudifyAPI.Features.FriendRequests.DTO;
 using StudifyAPI.Features.FriendRequests.Model;
 using StudifyAPI.Features.FriendRequests.Repository;
+using StudifyAPI.Features.Friends.DTO;
+using StudifyAPI.Features.Friends.Model;
+using StudifyAPI.Features.Friends.Repository;
+using StudifyAPI.Features.Friends.Service;
 using StudifyAPI.Features.Users.Repositories;
 using StudifyAPI.Shared.Exceptions;
 
@@ -10,16 +14,48 @@ namespace StudifyAPI.Features.FriendRequests.Service
     {
         private readonly IFriendRequestRepository _friendRequestRepository;
         private readonly IUserRepository _userRepository;
-        public FriendRequestService(IFriendRequestRepository friendRequestRepository, IUserRepository userRepository)
+        private readonly IFriendRepository _friendRepository;
+        private readonly IFriendService _friendService;
+        public FriendRequestService(IFriendRequestRepository friendRequestRepository, IUserRepository userRepository, IFriendRepository friendRepository, IFriendService friendService)
         {
             _friendRequestRepository = friendRequestRepository;
             _userRepository = userRepository;
+            _friendRepository = friendRepository;
+            _friendService = friendService;
         }
 
         // Receiver = logged in user
-        public Task<FriendRequestReadDTO> AcceptFriendRequestAsync(int requestId, int userId)
+        public async Task<FriendRequestReadDTO> AcceptFriendRequestAsync(int requestId, int userId)
         {
-            throw new NotImplementedException(); // needs to have the friend table first
+            // Check if the request exist
+            var receivedRequest = await _friendRequestRepository.GetFriendRequestAsync(requestId);
+            if (receivedRequest is null) {
+                throw new FriendRequestNotFoundException("No friend request to accept.");
+            }
+
+            // map friend request to friend
+            var friendDTO = new FriendCreateDTO
+            {
+                UserAId = receivedRequest.ReceiverId,
+                UserBId = receivedRequest.SenderId
+            };
+
+            // Add the friend to the friend table
+            await _friendService.AddFriendAsync(friendDTO);
+
+            // Delete the request from the request table
+            await _friendRequestRepository.DeleteFriendRequestAsync(receivedRequest);
+
+            // map request to reuquestDTO
+            var acceptedFriendRequestDTO = new FriendRequestReadDTO
+            {
+                Id = receivedRequest.Id,
+                ReceiverId = receivedRequest.ReceiverId,
+                ReceiverFirstName = receivedRequest.Receiver.Firstname,
+                SenderId = receivedRequest.SenderId,
+                SenderFirstName = receivedRequest.Sender.Firstname
+            };
+            return acceptedFriendRequestDTO;
         }
 
         // Cancel sent request
@@ -91,6 +127,8 @@ namespace StudifyAPI.Features.FriendRequests.Service
         // Send request
         public async Task<FriendRequestReadDTO> SendFriendRequestAsync(int senderId, FriendRequestCreateDTO requestCreateDTO)
         {
+            
+
             // check if the receiver exist by using email
             var existingReceiver = await _userRepository.GetUserByEmailAsync(requestCreateDTO.Email);
             if (existingReceiver is null)
@@ -98,11 +136,22 @@ namespace StudifyAPI.Features.FriendRequests.Service
                 throw new UserNotFoundException("The user you are trying to send a friend request to does not exist.");
             }
 
+            // Check if they are already friend
+            var aId = Math.Min(senderId, existingReceiver.Id);
+            var bId = Math.Max(senderId, existingReceiver.Id);
+            var friend = await _friendRepository.GetFriendAsync(senderId, existingReceiver.Id);
+            if (friend is not null) 
+            {
+                throw new FriendAlreadyExistException("The friendship already exist.");
+            }
+            
+            // check if sending request to him/her self
             if (senderId == existingReceiver.Id) 
             { 
                 throw new CannotFriendYourselfException("Cannot send a friend request to yourself.");
             }
 
+            // Get existing request in both end
             var existingRequest = await _friendRequestRepository.GetFriendRequestBetweenUsersAsync(senderId, existingReceiver.Id);
             if (existingRequest is not null)
             {

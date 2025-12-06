@@ -40,18 +40,6 @@ namespace StudifyAPI.Features.Friends.Controller
             });
         }
 
-        // Add friend
-        [HttpPost]
-        public async Task<IActionResult> AddAsync([FromBody] FriendCreateDTO createDTO)
-        {
-            var addedFriend = await _friendService.AddFriendAsync(createDTO);
-            return Ok(new ResponseDTO<FriendReadDTO>
-            { 
-                Success = true,
-                Message = "Friend added succesfully.",
-                Data = addedFriend
-            });
-        }
 
         // Unfriend 
         [HttpDelete("{friendId}")]

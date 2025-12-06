@@ -75,7 +75,7 @@ namespace StudifyAPI.Features.FriendRequests.Controller
         [HttpDelete("{requestId}/cancel")]
         public async Task<IActionResult> CancelAsync(int requestId) {
             var userId = GetUserIdFromClaims();
-            var cancelFriendRequest = await _requestService.CancelSentRequestAsync(requestId, requestId);
+            var cancelFriendRequest = await _requestService.CancelSentRequestAsync(requestId, userId);
             return Ok( new ResponseDTO<FriendRequestReadDTO> 
             { 
                 Success = true,

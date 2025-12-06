@@ -21,8 +21,11 @@ namespace StudifyAPI.Features.FriendRequests.Repository
         // Reject received request
         public Task<FriendRequest?> RejectFriendRequestAsync(int requestId, int userId);
 
-        // Accept request
-        public Task<FriendRequest?> AcceptFriendRequestAsync(int requestId, int userId);
+        // Get by request id
+        public Task<FriendRequest?> GetFriendRequestAsync(int requestId);
+
+        // Delete by request id
+        public Task<FriendRequest?> DeleteFriendRequestAsync(FriendRequest friendRequest);
 
     }
 }
