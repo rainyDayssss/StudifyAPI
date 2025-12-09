@@ -130,6 +130,7 @@ namespace StudifyAPI.Features.Users.Services
                 Lastname = existingUser.Lastname,
                 Email = existingUser.Email,
                 IsOnline = existingUser.IsOnline,
+                NumberOfFriends = existingUser.NumberOfFriends,
                 CurrentStreakDays = existingUser.Streak.CurrentStreakDays
             };
             return userReadDTO;

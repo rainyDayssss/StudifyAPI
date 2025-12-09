@@ -38,6 +38,7 @@ namespace StudifyAPI.Features.Friends.Service
             return createdFriendDTO;
         }
 
+        // Unfriend, so minus 1 from both users' number of friends
         public async Task<FriendReadDTO> DeleteFriendAsync(int userId, int friendId)
         {
             var aId = Math.Min(userId, friendId);
@@ -49,9 +50,12 @@ namespace StudifyAPI.Features.Friends.Service
                 throw new FriendNotFoundException("Friend not found.");
             }
 
+            // Minus 1 from both users
+            await _friendRepository.DecrementFriendCountAsync(deletedFriend);
+
             // if the userA is userAid, then UserB is the friends, else vise versa
             var friendUser = deletedFriend.UserAId == userId ? deletedFriend.UserB : deletedFriend.UserA;
-
+           
             var deletedFriendDTO = new FriendReadDTO
             {
                 FriendId = friendUser.Id,

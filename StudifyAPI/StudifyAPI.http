@@ -1,7 +1,7 @@
 @StudifyAPI_HostAddress = https://localhost:7103
 
 // USER
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqaG9ucm9zZWxsdGFsaXNpYzk5NEBnbWFpbC5jb20iLCJ1c2VySWQiOiI0IiwianRpIjoiMTJkN2ZiZDMtNmI2Mi00N2FmLTgyMTAtZTJlZDE0MDVhNTZjIiwiZXhwIjoxNzY1MzAyMTY2LCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.UPgh0mEQvwqj7H2cBV-K8DQGPCJekAqAYE45HmQTJuY
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqaG9ucm9zZWxsdGFsaXNpYzk5NEBnbWFpbC5jb20iLCJ1c2VySWQiOiI0IiwianRpIjoiYzliYjMxNDMtMmQ5Yy00MzgzLTkyOGYtYzJiNDc4MTE2ZjY2IiwiZXhwIjoxNzY1MzA3ODIwLCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.q647vPDt902t5-v7Q_eyzTR3gO2z581mtZ-pjITEqpE
 
 // Get all users
 GET {{StudifyAPI_HostAddress}}/api/users
@@ -142,7 +142,7 @@ Authorization: Bearer {{token}}
 ###s
 
 // Accepting received request (To be implemented, just pass the request id
-POST {{StudifyAPI_HostAddress}}/api/friendrequests/7/accept
+POST {{StudifyAPI_HostAddress}}/api/friendrequests/13/accept
 Authorization: Bearer {{token}}
 ###
 

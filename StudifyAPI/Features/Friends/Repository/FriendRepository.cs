@@ -19,7 +19,16 @@ namespace StudifyAPI.Features.Friends.Repository
             return friend;
         }
 
-        
+
+        public async Task DecrementFriendCountAsync(Friend friend)
+        {
+            if (friend.UserA != null) friend.UserA.NumberOfFriends--;
+            if (friend.UserB != null) friend.UserB.NumberOfFriends--;
+
+            await _context.SaveChangesAsync();
+        }
+
+
         public async Task<Friend?> DeleteFriendAsync(int userId, int friendId)
         {
             var friend = await _context.Friends
