@@ -24,7 +24,7 @@ namespace StudifyAPI.Features.FriendRequests.Service
             _friendService = friendService;
         }
 
-        // Receiver = logged in user
+        // Receiver = logged in user, accept friend, meaing add 1 from both users' number of friends
         public async Task<FriendRequestReadDTO> AcceptFriendRequestAsync(int requestId, int userId)
         {
             // Check if the request exist
@@ -39,6 +39,10 @@ namespace StudifyAPI.Features.FriendRequests.Service
                 UserAId = receivedRequest.ReceiverId,
                 UserBId = receivedRequest.SenderId
             };
+
+            // add 1 to user's number of friends
+            receivedRequest.Sender.NumberOfFriends++;
+            receivedRequest.Receiver.NumberOfFriends++;
 
             // Add the friend to the friend table
             await _friendService.AddFriendAsync(friendDTO);

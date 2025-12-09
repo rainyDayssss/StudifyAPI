@@ -90,7 +90,10 @@ namespace StudifyAPI.Features.FriendRequests.Repository
 
         public async Task<FriendRequest?> GetFriendRequestAsync(int requestId)
         {
-            return await _context.FriendRequests.FindAsync(requestId);
+            return await _context.FriendRequests
+                .Include(fr => fr.Sender)
+                .Include(fr => fr.Receiver)
+                .FirstOrDefaultAsync(fr => fr.Id == requestId);
         }
 
         public async Task<FriendRequest?> DeleteFriendRequestAsync(FriendRequest friendRequest)

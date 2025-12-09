@@ -8,5 +8,7 @@
         public string Email { get; set; } = null!;
         public bool IsOnline { get; set; }
         public int CurrentStreakDays { get; set; }
+
+        public int NumberOfFriends {get; set; }
     }
 }

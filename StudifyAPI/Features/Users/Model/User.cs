@@ -17,6 +17,7 @@ namespace StudifyAPI.Features.Users.Models
         [Required]
         public string Password { get; set; } = null!;
         public bool IsOnline { get; set; }
+        public int NumberOfFriends { get; set; } = 0;
         public UserStreak Streak { get; set; } = null!;
         public List<UserTask> Tasks { get; set; } = new();  
         public List<FriendRequest> SentFriendRequests { get; set; } = new();
