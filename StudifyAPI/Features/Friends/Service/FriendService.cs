@@ -33,7 +33,7 @@ namespace StudifyAPI.Features.Friends.Service
             {
                 FriendId = friendUser.Id,
                 Firstname = friendUser.Firstname,
-                LastName = friendUser.Lastname
+                Lastname = friendUser.Lastname
             };
             return createdFriendDTO;
         }
@@ -60,7 +60,7 @@ namespace StudifyAPI.Features.Friends.Service
             {
                 FriendId = friendUser.Id,
                 Firstname = friendUser.Firstname,
-                LastName = friendUser.Lastname
+                Lastname = friendUser.Lastname
             };
 
             return deletedFriendDTO;
@@ -78,7 +78,8 @@ namespace StudifyAPI.Features.Friends.Service
                 {
                     FriendId = friendUser.Id,
                     Firstname = friendUser.Firstname,
-                    LastName = friendUser.Lastname
+                    Lastname = friendUser.Lastname,
+                    IsOnline = friendUser.IsOnline
                 };
             }).ToList();
 
@@ -103,7 +104,7 @@ namespace StudifyAPI.Features.Friends.Service
             {
                 FriendId = friendUser.Id,
                 Firstname = friendUser.Firstname,
-                LastName = friendUser.Lastname
+                Lastname = friendUser.Lastname
             };
 
             return friendDTO;

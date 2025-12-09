@@ -1,7 +1,7 @@
 @StudifyAPI_HostAddress = https://localhost:7103
 
 // USER
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqaG9ucm9zZWxsdGFsaXNpYzk5NEBnbWFpbC5jb20iLCJ1c2VySWQiOiI0IiwianRpIjoiYzliYjMxNDMtMmQ5Yy00MzgzLTkyOGYtYzJiNDc4MTE2ZjY2IiwiZXhwIjoxNzY1MzA3ODIwLCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.q647vPDt902t5-v7Q_eyzTR3gO2z581mtZ-pjITEqpE
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqaG9ucm9zZWxsdGFsaXNpYzk5NEBnbWFpbC5jb20iLCJ1c2VySWQiOiI0IiwianRpIjoiM2ZlNTk4MDktMTYwMS00MDlmLWFhOTItOWFkMjk4ODllYWZmIiwiZXhwIjoxNzY1MzExNzQ1LCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.k-fwssGNm0ex8j8MxTdqCtCckTPWHWPFBaWvnZpPLJU
 
 // Get all users
 GET {{StudifyAPI_HostAddress}}/api/users
@@ -160,7 +160,7 @@ Authorization: Bearer {{token}}
 // FRIENDS 
 
 // Get user's all friends
-GET {{StudifyAPI_HostAddress}}/api/friends
+GET {{StudifyAPI_HostAddress}}/api/friends/me
 Authorization: Bearer {{token}}
 ###
 
