@@ -157,6 +157,7 @@ namespace StudifyAPI.Features.Users.Services
             return _jwtService.GenerateToken(existingUser.Email, existingUser.Id);
         }
 
+        // Logout
         public async Task<UserReadDTO> LogoutAsync(int userId)
         {
             var existingUser = await _userRepository.LogoutAsync(userId);

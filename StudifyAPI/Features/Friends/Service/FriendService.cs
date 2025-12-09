@@ -78,7 +78,8 @@ namespace StudifyAPI.Features.Friends.Service
                 {
                     FriendId = friendUser.Id,
                     Firstname = friendUser.Firstname,
-                    Lastname = friendUser.Lastname
+                    Lastname = friendUser.Lastname,
+                    IsOnline = friendUser.IsOnline
                 };
             }).ToList();
 
