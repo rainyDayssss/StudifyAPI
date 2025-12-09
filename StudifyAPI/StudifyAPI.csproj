@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Pet\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

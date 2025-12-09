@@ -77,6 +77,7 @@ namespace StudifyAPI.Features.FriendRequests.Service
             return cancelledRequest;
         }
 
+        // Get all received requests
         public async Task<List<FriendRequestReadDTO>> GetAllReceivedRequestsAsync(int receiverId)
         {
             var receivedFriendRequests = await _friendRequestRepository.GetAllReceivedRequestsAsync(receiverId);
@@ -85,6 +86,7 @@ namespace StudifyAPI.Features.FriendRequests.Service
                 Id = fr.Id,
                 SenderId = fr.SenderId,
                 SenderFirstName = fr.Sender.Firstname,
+                SenderLastName = fr.Sender.Lastname,
                 ReceiverId = fr.ReceiverId,
                 ReceiverFirstName = fr.Receiver.Firstname
             }).ToList();
@@ -99,6 +101,7 @@ namespace StudifyAPI.Features.FriendRequests.Service
                 Id = fr.Id,
                 SenderId = fr.SenderId,
                 SenderFirstName = fr.Sender.Firstname,
+                SenderLastName = fr.Sender.Lastname,
                 ReceiverId = fr.ReceiverId,
                 ReceiverFirstName = fr.Receiver.Firstname
             }).ToList();

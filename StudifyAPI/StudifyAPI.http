@@ -1,7 +1,7 @@
 @StudifyAPI_HostAddress = https://localhost:7103
 
 // USER
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJHYWJ1dGFuQGdtYWlsLmNvbSIsInVzZXJJZCI6IjIiLCJqdGkiOiIyZjY4OTFhMi04NTFmLTQ5NTEtYTBlZi1kYjMzM2QzMmIwN2IiLCJleHAiOjE3NjUwMzg0ODQsImlzcyI6IlN0dWRpZnlBUEkiLCJhdWQiOiJTdHVkaWZ5VXNlcnMifQ.QRN9BXjOAX9LVwHbujAyDruSAZvjJiJpCX5v1Csdc2Y
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqaG9ucm9zZWxsdGFsaXNpYzk5NEBnbWFpbC5jb20iLCJ1c2VySWQiOiI0IiwianRpIjoiMTJkN2ZiZDMtNmI2Mi00N2FmLTgyMTAtZTJlZDE0MDVhNTZjIiwiZXhwIjoxNzY1MzAyMTY2LCJpc3MiOiJTdHVkaWZ5QVBJIiwiYXVkIjoiU3R1ZGlmeVVzZXJzIn0.UPgh0mEQvwqj7H2cBV-K8DQGPCJekAqAYE45HmQTJuY
 
 // Get all users
 GET {{StudifyAPI_HostAddress}}/api/users
@@ -26,8 +26,8 @@ POST {{StudifyAPI_HostAddress}}/api/auth/login
 Content-Type: application/json
 
 {
-  "Email": "Gabutan@gmail.com",
-  "Password": "ducay123"
+  "Email": "jhonroselltalisic994@gmail.com",
+  "Password": "123456"
 } 
 
 ###

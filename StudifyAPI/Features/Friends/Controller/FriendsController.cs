@@ -17,7 +17,7 @@ namespace StudifyAPI.Features.Friends.Controller
             _friendService = friendService;
         }
         // Get all user's friends
-        [HttpGet]
+        [HttpGet("me")]
         public async Task<IActionResult> GetAllAsync() {
             var userId = GetUserIdFromClaims();
             var friends = await _friendService.GetAllFriendsAsync(userId);
