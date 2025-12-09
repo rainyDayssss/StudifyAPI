@@ -21,6 +21,7 @@ namespace StudifyAPI.Features.Tasks.Controller
             _taskService = taskService;
         }
 
+        // Get all  user's tasks
         [HttpGet("me")]
         public async Task<IActionResult> GetAllAsync()
         {

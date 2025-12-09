@@ -1,4 +1,6 @@
-﻿namespace StudifyAPI.Shared
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+
+namespace StudifyAPI.Shared
 {
     public class ResponseDTO<T>
     {

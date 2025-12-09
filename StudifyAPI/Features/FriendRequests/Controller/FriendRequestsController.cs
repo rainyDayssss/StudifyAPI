@@ -44,9 +44,9 @@ namespace StudifyAPI.Features.FriendRequests.Controller
             });
         }
 
-        // Create friend request
+        // Create friend request, just email
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(FriendRequestCreateDTO requestDTO)
+        public async Task<IActionResult> CreateAsync([FromBody] FriendRequestCreateDTO requestDTO)
         {
             var senderId = GetUserIdFromClaims();
             var createdRequest = await _requestService.SendFriendRequestAsync(senderId, requestDTO);

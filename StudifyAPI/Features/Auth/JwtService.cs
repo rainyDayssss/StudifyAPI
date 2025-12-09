@@ -36,7 +36,8 @@ namespace StudifyAPI.Features.Auth
                 issuer: jwtSettings["Issuer"],
                 audience: jwtSettings["Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings["ExpiryMinutes"])),
+                //expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings["ExpiryMinutes"])),
+                expires: DateTime.UtcNow.AddMinutes(60), // 60 mins, for just testing
                 signingCredentials: creds
             );
 

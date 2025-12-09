@@ -44,7 +44,7 @@ namespace StudifyAPI.Features.Users.Controllers
             });
         }
         
-        // search by using email // test foe the new git local account
+        // search by using email // test for the new git local account
         [HttpGet("{email}")]
         [Authorize]
         public async Task<IActionResult> GetByEmailAsync(string email)
