@@ -23,5 +23,5 @@ This is a .NET 10.0 Web API project using a Feature-based (Vertical Slice) folde
 - **Database Migrations**: `dotnet ef migrations add <MigrationName>` and `dotnet ef database update`
 
 ## Quirks & Notes
-- **Testing**: There are currently no test projects or suites in this repository. 
+- **Testing**: xUnit + Moq + FluentAssertions are used for unit testing. All test code resides in `StudifyAPI.Tests/`. Run with `dotnet test` from the root directory. 
 - **Dependency Injection**: When adding a new Feature slice, manually register its Repository and Service in `Program.cs` (e.g., `builder.Services.AddScoped<IUserService, UserService>();`).
