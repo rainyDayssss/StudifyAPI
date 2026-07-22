@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using StudifyAPI.Features.Friends.DTO;
 using StudifyAPI.Features.Friends.Service;
 using StudifyAPI.Shared;
+using StudifyAPI.Shared.Extensions;
 
 namespace StudifyAPI.Features.Friends.Controller
 {
@@ -19,7 +20,7 @@ namespace StudifyAPI.Features.Friends.Controller
         // Get all user's friends
         [HttpGet("me")]
         public async Task<IActionResult> GetAllAsync() {
-            var userId = GetUserIdFromClaims();
+            var userId = User.GetUserId();
             var friends = await _friendService.GetAllFriendsAsync(userId);
             return Ok( new ResponseDTO<List<FriendReadDTO>> { 
                 Success = true,
@@ -31,7 +32,7 @@ namespace StudifyAPI.Features.Friends.Controller
         // Get user friend
         [HttpGet("{friendId}")]
         public async Task<IActionResult> GetAsync(int friendId) {
-            var userId = GetUserIdFromClaims();
+            var userId = User.GetUserId();
             var friend = await _friendService.GetFriendAsync(userId, friendId);
             return Ok( new ResponseDTO<FriendReadDTO> { 
                 Success = true,
@@ -44,20 +45,13 @@ namespace StudifyAPI.Features.Friends.Controller
         // Unfriend 
         [HttpDelete("{friendId}")]
         public async Task<IActionResult> DeleteAsync(int friendId) {
-            var userId = GetUserIdFromClaims();
+            var userId = User.GetUserId();
             var deletedFriend = await _friendService.DeleteFriendAsync(userId, friendId);
             return Ok(new ResponseDTO<FriendReadDTO> { 
                 Success = true,
                 Message = "Friend deleted (unfriended) successfully.",
                 Data = deletedFriend
             });
-        }
-
-        private int GetUserIdFromClaims()
-        {
-            if (!int.TryParse(User.FindFirst("userId")?.Value, out var userId))
-                throw new UnauthorizedAccessException("Invalid user token.");
-            return userId;
         }
     }
 }

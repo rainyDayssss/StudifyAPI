@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using StudifyAPI.Features.Auth.Model;
 using StudifyAPI.Features.FriendRequests.Model;
 using StudifyAPI.Features.Friends.Model;
 using StudifyAPI.Features.Tasks.Model;
@@ -24,6 +25,6 @@ namespace StudifyAPI.Features.Users.Models
         public List<FriendRequest> ReceivedFriendRequests { get; set; } = new();
         public List<Friend> FriendsAsUserA { get; set; } = new();
         public List<Friend> FriendsAsUserB { get; set; } = new();
-
+        public List<RefreshToken> RefreshTokens { get; set; } = new();
     }
 }

@@ -5,6 +5,7 @@ using StudifyAPI.Features.Tasks.DTO;
 using StudifyAPI.Features.Tasks.Model;
 using StudifyAPI.Features.Tasks.Service;
 using StudifyAPI.Shared;
+using StudifyAPI.Shared.Extensions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -25,7 +26,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         [HttpGet("me")]
         public async Task<IActionResult> GetAllAsync()
         {
-            var userId = GetUserIdFromClaims();
+            var userId = User.GetUserId();
             return Ok(new ResponseDTO<List<UserTaskReadDTO>>
             {
                 Success = true,
@@ -37,7 +38,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         [HttpGet("{taskId}")]
         public async Task<IActionResult> GetAsync(int taskId)
         {
-            var userId = GetUserIdFromClaims();
+            var userId = User.GetUserId();
             return Ok(new ResponseDTO<UserTaskReadDTO?>
             {
                 Success = true,
@@ -49,7 +50,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] UserTaskCreateDTO taskCreateDTO)
         {
-            var userId = GetUserIdFromClaims();
+            var userId = User.GetUserId();
             var createdTask = await _taskService.CreateTaskAsync(userId, taskCreateDTO);
             return Ok(new ResponseDTO<UserTaskReadDTO?> 
             { 
@@ -62,7 +63,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         [HttpPatch("{taskId}")]
         public async Task<IActionResult> PatchAsync(int taskId, [FromBody] UserTaskPatchDTO taskPatchDTO)
         {
-            var userId = GetUserIdFromClaims();
+            var userId = User.GetUserId();
             var patchedTask = await _taskService.PatchTaskAsync(taskId, userId, taskPatchDTO);
             return Ok(new ResponseDTO<UserTaskReadDTO?>
             {
@@ -75,7 +76,7 @@ namespace StudifyAPI.Features.Tasks.Controller
         [HttpDelete("{taskId}")]
         public async Task<IActionResult> DeleteAsync(int taskId)
         {
-            var userId = GetUserIdFromClaims();
+            var userId = User.GetUserId();
             var deletedTask = await _taskService.DeleteTaskAsync(taskId, userId);
             return Ok(new ResponseDTO<UserTaskReadDTO?>
             {
@@ -84,12 +85,6 @@ namespace StudifyAPI.Features.Tasks.Controller
                 Data = deletedTask
             });
 
-        }
-        private int GetUserIdFromClaims()
-        {
-            if (!int.TryParse(User.FindFirst("userId")?.Value, out var userId))
-                throw new UnauthorizedAccessException("Invalid user token.");
-            return userId;
         }
     }
 }

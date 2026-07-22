@@ -1,19 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-using StudifyAPI.Features.Auth;
-using StudifyAPI.Features.Users.DTOs;
-using System.Globalization;
+﻿using StudifyAPI.Features.Users.DTOs;
 
 namespace StudifyAPI.Features.Users.Services
 {
     public interface IUserService
     {
-        public Task<List<UserReadDTO>> GetAllUsersAsync();
-        public Task<UserReadDTO> GetUserByIdAsync(int id);
-        public Task<UserReadDTO> CreateUserAsync(UserCreateDTO userCreateDTO);
-        public Task<UserReadDTO> PatchUserAsync(int id, UserPatchDTO userPatchDTO);
-        public Task<UserReadDTO> DeleteUserAsync(int id);
-        public Task<UserReadDTO> GetUserByEmailAsync(string email);
-        public Task<string> LoginAsync(UserLoginDTO userLoginDTO);
-        public Task<UserReadDTO> LogoutAsync(int userId);   
+        Task<List<UserReadDTO>> GetAllUsersAsync();
+        Task<UserReadDTO> GetUserByIdAsync(int id);
+        Task<UserReadDTO> GetUserByEmailAsync(string email);
+        Task<UserReadDTO> PatchUserAsync(int id, UserPatchDTO userPatchDTO);
+        Task<UserReadDTO> DeleteUserAsync(int id);
     }
 }

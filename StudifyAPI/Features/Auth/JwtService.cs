@@ -1,11 +1,12 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace StudifyAPI.Features.Auth
 {
-    public class JwtService
+    public class JwtService : IJwtService
     {
         private readonly IConfiguration _config;
 
@@ -14,34 +15,38 @@ namespace StudifyAPI.Features.Auth
             _config = config;
         }
 
-        public string GenerateToken(string email, int userId)
+        public string GenerateAccessToken(string email, int userId)
         {
             var jwtSettings = _config.GetSection("JwtSettings");
+            var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("JWT SecretKey is missing from configuration.");
+            var expiryInMinutes = Convert.ToDouble(jwtSettings["ExpiryInMinutes"] ?? "15");
 
-            // Define claims (info stored in token)
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, email),
-                new Claim("userId", userId.ToString()), // <- standard claim
+                new Claim("userId", userId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-
-            // Create signing credentials using secret key
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            // Create the JWT token
             var token = new JwtSecurityToken(
                 issuer: jwtSettings["Issuer"],
                 audience: jwtSettings["Audience"],
                 claims: claims,
-                //expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings["ExpiryMinutes"])),
-                expires: DateTime.UtcNow.AddMinutes(60), // 60 mins, for just testing
+                expires: DateTime.UtcNow.AddMinutes(expiryInMinutes),
                 signingCredentials: creds
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string GenerateRefreshToken()
+        {
+            // Cryptographically secure random token - much stronger than Guid.NewGuid()
+            var randomBytes = RandomNumberGenerator.GetBytes(64);
+            return Convert.ToBase64String(randomBytes);
         }
     }
 }

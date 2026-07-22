@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using StudifyAPI.Features.Users.DTOs;
 using StudifyAPI.Features.Users.Services;
 using StudifyAPI.Shared;
-
+using StudifyAPI.Shared.Extensions;
 
 namespace StudifyAPI.Features.Users.Controllers
 {
@@ -16,6 +16,7 @@ namespace StudifyAPI.Features.Users.Controllers
         {
             _userService = userService;
         }
+
         // This could be just for testing purposes, in real life we might not want to expose all users.
         [HttpGet]
         [Authorize]
@@ -34,7 +35,7 @@ namespace StudifyAPI.Features.Users.Controllers
         [Authorize]
         public async Task<IActionResult> GetAsync()
         {
-            int userId = GetUserIdFromClaims();
+            int userId = User.GetUserId();
             var userProfile = await _userService.GetUserByIdAsync(userId);
             return Ok(new ResponseDTO<UserReadDTO>
             {
@@ -44,7 +45,7 @@ namespace StudifyAPI.Features.Users.Controllers
             });
         }
         
-        // search by using email // test for the new git local account
+        // search by using email
         [HttpGet("{email}")]
         [Authorize]
         public async Task<IActionResult> GetByEmailAsync(string email)
@@ -58,30 +59,12 @@ namespace StudifyAPI.Features.Users.Controllers
             });
         }
 
-        // SignUp new user
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] UserCreateDTO userCreateDTO)
-        {
-            var createdUser = await _userService.CreateUserAsync(userCreateDTO);
-            return Ok(new ResponseDTO<UserReadDTO>
-            {
-                Success = true,
-                Message = "User created successfully.",
-                Data = createdUser
-            });
-        }
-
         // Update the logged in user partially 
         [HttpPatch("me")]
         [Authorize]
-        public async Task<IActionResult> PatchAsync([FromBody] UserPatchDTO userPatchDTO) {
-            foreach (var c in User.Claims)
-            {
-                Console.WriteLine($"{c.Type} : {c.Value}");
-            }
-
-            // Get the user ID from the JWT token claims
-            int userId = GetUserIdFromClaims();
+        public async Task<IActionResult> PatchAsync([FromBody] UserPatchDTO userPatchDTO) 
+        {
+            int userId = User.GetUserId();
             var updatedUser = await _userService.PatchUserAsync(userId, userPatchDTO);
             return Ok(new ResponseDTO<UserReadDTO>
             { 
@@ -96,8 +79,7 @@ namespace StudifyAPI.Features.Users.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteAsync()
         {
-
-            int userId = GetUserIdFromClaims();
+            int userId = User.GetUserId();
             var deletedUser = await _userService.DeleteUserAsync(userId);
             return Ok(new ResponseDTO<UserReadDTO> 
             {
@@ -105,30 +87,6 @@ namespace StudifyAPI.Features.Users.Controllers
                 Message = "Your account has been deleted successfully.",
                 Data = deletedUser 
             });
-        }
-
-        // For logging out, let the client just delete the token on their side.
-        [HttpPost("me/logout")]
-        [Authorize]
-        public async Task<IActionResult> LogoutAsync()
-        {
-            int userId = GetUserIdFromClaims();
-            var logoutUser = await _userService.LogoutAsync(userId);
-
-            return Ok(new ResponseDTO<UserReadDTO>
-            {
-                Success = true,
-                Message = "Logged out successfully.",
-                Data = logoutUser
-            });
-        }
-
-        
-        private int GetUserIdFromClaims()
-        {
-            if (!int.TryParse(User.FindFirst("userId")?.Value, out var userId))
-                throw new UnauthorizedAccessException("Invalid user token.");
-            return userId;
         }
     }
 }

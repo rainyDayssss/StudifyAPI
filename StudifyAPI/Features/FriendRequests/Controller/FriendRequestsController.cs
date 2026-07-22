@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using StudifyAPI.Features.FriendRequests.DTO;
 using StudifyAPI.Features.FriendRequests.Service;
 using StudifyAPI.Shared;
+using StudifyAPI.Shared.Extensions;
 
 namespace StudifyAPI.Features.FriendRequests.Controller
 {
@@ -21,7 +22,7 @@ namespace StudifyAPI.Features.FriendRequests.Controller
         [HttpGet("received/me")]
         public async Task<IActionResult> GetAllReceivedRequestsAsync()
         {
-            int receiverId = GetUserIdFromClaims();
+            int receiverId = User.GetUserId();
             var requests = await _requestService.GetAllReceivedRequestsAsync(receiverId);
             return Ok(new ResponseDTO<List<FriendRequestReadDTO>> {
                 Success = true,
@@ -34,7 +35,7 @@ namespace StudifyAPI.Features.FriendRequests.Controller
         [HttpGet("sent/me")]
         public async Task<IActionResult> GetAllSentRequestsAsync()
         {
-            int senderId = GetUserIdFromClaims();
+            int senderId = User.GetUserId();
             var requests = await _requestService.GetAllSentRequestsAsync(senderId);
             return Ok(new ResponseDTO<List<FriendRequestReadDTO>>
             {
@@ -48,7 +49,7 @@ namespace StudifyAPI.Features.FriendRequests.Controller
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] FriendRequestCreateDTO requestDTO)
         {
-            var senderId = GetUserIdFromClaims();
+            var senderId = User.GetUserId();
             var createdRequest = await _requestService.SendFriendRequestAsync(senderId, requestDTO);
             return Ok(new ResponseDTO<FriendRequestReadDTO>
             {
@@ -61,7 +62,7 @@ namespace StudifyAPI.Features.FriendRequests.Controller
         // Accept request, receiverId = userId of logged in
         [HttpPost("{requestId}/accept")]
         public async Task<IActionResult> AcceptAsync(int requestId) {
-            var userId = GetUserIdFromClaims();
+            var userId = User.GetUserId();
             var acceptedRequest = await _requestService.AcceptFriendRequestAsync(requestId, userId);
             return Ok(new ResponseDTO<FriendRequestReadDTO>
             {
@@ -74,7 +75,7 @@ namespace StudifyAPI.Features.FriendRequests.Controller
         // Cancel friend request sent
         [HttpDelete("{requestId}/cancel")]
         public async Task<IActionResult> CancelAsync(int requestId) {
-            var userId = GetUserIdFromClaims();
+            var userId = User.GetUserId();
             var cancelFriendRequest = await _requestService.CancelSentRequestAsync(requestId, userId);
             return Ok( new ResponseDTO<FriendRequestReadDTO> 
             { 
@@ -87,7 +88,7 @@ namespace StudifyAPI.Features.FriendRequests.Controller
         // Reject received request
         [HttpDelete("{requestId}/reject")]
         public async Task<IActionResult> RejectAsync(int requestId) {
-            var userId = GetUserIdFromClaims();
+            var userId = User.GetUserId();
             var rejectedFriendRequest = await _requestService.RejectSentRequestAsync(requestId, userId);
             return Ok( new ResponseDTO<FriendRequestReadDTO>
             {
@@ -95,13 +96,6 @@ namespace StudifyAPI.Features.FriendRequests.Controller
                 Message = "Received request rejected successfully",
                 Data = rejectedFriendRequest
             });
-        }
-
-        private int GetUserIdFromClaims()
-        {
-            if (!int.TryParse(User.FindFirst("userId")?.Value, out var userId))
-                throw new UnauthorizedAccessException("Invalid user token.");
-            return userId;
         }
     } 
 }

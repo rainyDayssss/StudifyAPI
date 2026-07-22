@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,34 +7,43 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StudifyAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedUserStreakTaskPomodoroFriendtable : Migration
+    public partial class AddRefreshTokens : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Firstname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Lastname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsOnline = table.Column<bool>(type: "bit", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Firstname = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Lastname = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Password = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsOnline = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    NumberOfFriends = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "FriendRequests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     SenderId = table.Column<int>(type: "int", nullable: false),
                     ReceiverId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -52,7 +62,8 @@ namespace StudifyAPI.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Friends",
@@ -76,7 +87,33 @@ namespace StudifyAPI.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Token = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    RevokedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshTokens_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "UserStreaks",
@@ -84,7 +121,7 @@ namespace StudifyAPI.Migrations
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
                     CurrentStreakDays = table.Column<int>(type: "int", nullable: false),
-                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastUpdated = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,16 +132,18 @@ namespace StudifyAPI.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "UserTasks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsCompleted = table.Column<bool>(type: "bit", nullable: false),
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Title = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsCompleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -116,7 +155,8 @@ namespace StudifyAPI.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FriendRequests_ReceiverId",
@@ -133,6 +173,17 @@ namespace StudifyAPI.Migrations
                 name: "IX_Friends_UserBId",
                 table: "Friends",
                 column: "UserBId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_Token",
+                table: "RefreshTokens",
+                column: "Token",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshTokens_UserId",
+                table: "RefreshTokens",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
@@ -154,6 +205,9 @@ namespace StudifyAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Friends");
+
+            migrationBuilder.DropTable(
+                name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "UserStreaks");

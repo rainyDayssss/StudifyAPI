@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace StudifyAPI.Features.Users.DTOs
+namespace StudifyAPI.Features.Auth.DTOs
 {
     public class UserCreateDTO
     {
