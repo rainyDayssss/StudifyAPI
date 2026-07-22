@@ -1,4 +1,4 @@
-﻿namespace StudifyAPI.Features.Auth
+﻿namespace StudifyAPI.Features.Auth.DTOs
 {
     public class UserLoginDTO
     {

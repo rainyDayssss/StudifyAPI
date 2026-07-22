@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using StudifyAPI.Features.Auth.Model;
 using StudifyAPI.Features.FriendRequests.Model;
 using StudifyAPI.Features.Friends.Model;
 using StudifyAPI.Features.Tasks.Model;
@@ -13,12 +13,14 @@ namespace StudifyAPI.Shared.Database
         public StudifyDbContext(DbContextOptions<StudifyDbContext> options) : base(options)
         {
         }
-
+        
         public DbSet<User> Users { get; set; }
         public DbSet<UserStreak> UserStreaks { get; set; }
         public DbSet<UserTask> UserTasks { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
         public DbSet<Friend> Friends { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
@@ -53,7 +55,6 @@ namespace StudifyAPI.Shared.Database
                 .HasIndex(fr => new { fr.SenderId, fr.ReceiverId })
                 .IsUnique();
 
-
             modelBuilder.Entity<Friend>()
                 .HasKey(f => new { f.UserAId, f.UserBId });
 
@@ -68,6 +69,17 @@ namespace StudifyAPI.Shared.Database
                 .WithMany(u => u.FriendsAsUserB)
                 .HasForeignKey(u => u.UserBId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // RefreshToken: unique index on Token, cascade delete when user is deleted
+            modelBuilder.Entity<RefreshToken>()
+                .HasIndex(rt => rt.Token)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.RefreshTokens)
+                .WithOne(rt => rt.User)
+                .HasForeignKey(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
