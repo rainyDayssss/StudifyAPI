@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
+﻿using Microsoft.EntityFrameworkCore;
 using StudifyAPI.Features.FriendRequests.Model;
 using StudifyAPI.Features.Users.Models;
 using StudifyAPI.Shared.Database;

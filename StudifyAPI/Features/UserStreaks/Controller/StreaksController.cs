@@ -5,6 +5,7 @@ using StudifyAPI.Features.UserStreaks.DTO;
 using StudifyAPI.Features.UserStreaks.Model;
 using StudifyAPI.Features.UserStreaks.Service;
 using StudifyAPI.Shared;
+using StudifyAPI.Shared.Extensions;
 
 namespace StudifyAPI.Features.UserStreaks.Controller
 {
@@ -21,7 +22,7 @@ namespace StudifyAPI.Features.UserStreaks.Controller
         [HttpGet("me")]
         public async Task<IActionResult> GetAsync()
         {
-            var userId = GetUserIdFromClaims();
+            var userId = User.GetUserId();
             return Ok(new ResponseDTO<UserStreakReadDTO>
             {
                 Success = true,
@@ -33,20 +34,13 @@ namespace StudifyAPI.Features.UserStreaks.Controller
         [HttpPost]
         public async Task<IActionResult> UpdateAsync()
         {
-            var userId = GetUserIdFromClaims();
+            var userId = User.GetUserId();
 
             return Ok( new ResponseDTO<UserStreakReadDTO> { 
                 Success = true,
                 Message = "User streak updated successfully",
                 Data = await _streakService.UpdateUserStreaksAsync(userId)
             });
-        }
-
-        private int GetUserIdFromClaims()
-        {
-            if (!int.TryParse(User.FindFirst("userId")?.Value, out var userId))
-                throw new UnauthorizedAccessException("Invalid user token.");
-            return userId;
         }
     }
 }

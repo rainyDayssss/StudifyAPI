@@ -1,4 +1,5 @@
-﻿using StudifyAPI.Features.FriendRequests.DTO;
+﻿using AutoMapper;
+using StudifyAPI.Features.FriendRequests.DTO;
 using StudifyAPI.Features.FriendRequests.Model;
 using StudifyAPI.Features.FriendRequests.Repository;
 using StudifyAPI.Features.Friends.DTO;
@@ -16,12 +17,20 @@ namespace StudifyAPI.Features.FriendRequests.Service
         private readonly IUserRepository _userRepository;
         private readonly IFriendRepository _friendRepository;
         private readonly IFriendService _friendService;
-        public FriendRequestService(IFriendRequestRepository friendRequestRepository, IUserRepository userRepository, IFriendRepository friendRepository, IFriendService friendService)
+        private readonly IMapper _mapper;
+
+        public FriendRequestService(
+            IFriendRequestRepository friendRequestRepository, 
+            IUserRepository userRepository, 
+            IFriendRepository friendRepository, 
+            IFriendService friendService,
+            IMapper mapper)
         {
             _friendRequestRepository = friendRequestRepository;
             _userRepository = userRepository;
             _friendRepository = friendRepository;
             _friendService = friendService;
+            _mapper = mapper;
         }
 
         // Receiver = logged in user, accept friend, meaing add 1 from both users' number of friends
@@ -31,6 +40,12 @@ namespace StudifyAPI.Features.FriendRequests.Service
             var receivedRequest = await _friendRequestRepository.GetFriendRequestAsync(requestId);
             if (receivedRequest is null) {
                 throw new FriendRequestNotFoundException("No friend request to accept.");
+            }
+
+            // Verify the logged-in user is actually the receiver of the request
+            if (receivedRequest.ReceiverId != userId)
+            {
+                throw new UnauthorizedAccessException("You cannot accept a friend request sent to someone else.");
             }
 
             // map friend request to friend
@@ -50,16 +65,7 @@ namespace StudifyAPI.Features.FriendRequests.Service
             // Delete the request from the request table
             await _friendRequestRepository.DeleteFriendRequestAsync(receivedRequest);
 
-            // map request to reuquestDTO
-            var acceptedFriendRequestDTO = new FriendRequestReadDTO
-            {
-                Id = receivedRequest.Id,
-                ReceiverId = receivedRequest.ReceiverId,
-                ReceiverFirstName = receivedRequest.Receiver.Firstname,
-                SenderId = receivedRequest.SenderId,
-                SenderFirstName = receivedRequest.Sender.Firstname
-            };
-            return acceptedFriendRequestDTO;
+            return _mapper.Map<FriendRequestReadDTO>(receivedRequest);
         }
 
         // Cancel sent request
@@ -70,72 +76,35 @@ namespace StudifyAPI.Features.FriendRequests.Service
             {
                 throw new FriendRequestNotFoundException("No sent friend request found to cancel.");
             }
-            var cancelledRequest = new FriendRequestReadDTO
-            {
-                Id = sentRequest.Id,
-                SenderId = sentRequest.SenderId,
-                SenderFirstName = sentRequest.Sender.Firstname,
-                ReceiverId = sentRequest.ReceiverId,
-                ReceiverFirstName = sentRequest.Receiver.Firstname
-            };
-            return cancelledRequest;
+            return _mapper.Map<FriendRequestReadDTO>(sentRequest);
         }
 
         // Get all received requests
         public async Task<List<FriendRequestReadDTO>> GetAllReceivedRequestsAsync(int receiverId)
         {
             var receivedFriendRequests = await _friendRequestRepository.GetAllReceivedRequestsAsync(receiverId);
-            var receivedFriendRequestDTOs = receivedFriendRequests.Select(fr => new FriendRequestReadDTO
-            {
-                Id = fr.Id,
-                SenderId = fr.SenderId,
-                SenderFirstName = fr.Sender.Firstname,
-                SenderLastName = fr.Sender.Lastname,
-                ReceiverId = fr.ReceiverId,
-                ReceiverFirstName = fr.Receiver.Firstname
-            }).ToList();
-            return receivedFriendRequestDTOs;
+            return _mapper.Map<List<FriendRequestReadDTO>>(receivedFriendRequests);
         }
 
         public async Task<List<FriendRequestReadDTO>> GetAllSentRequestsAsync(int senderId)
         {
             var sentFriendRequests = await _friendRequestRepository.GetAllSentRequestsAsync(senderId);
-            var sentFriendRequestDTOs = sentFriendRequests.Select(fr => new FriendRequestReadDTO
-            {
-                Id = fr.Id,
-                SenderId = fr.SenderId,
-                SenderFirstName = fr.Sender.Firstname,
-                SenderLastName = fr.Sender.Lastname,
-                ReceiverId = fr.ReceiverId,
-                ReceiverFirstName = fr.Receiver.Firstname
-            }).ToList();
-            return sentFriendRequestDTOs;
+            return _mapper.Map<List<FriendRequestReadDTO>>(sentFriendRequests);
         }
 
         // Reject receive request
         public async Task<FriendRequestReadDTO> RejectSentRequestAsync(int requestId, int userId)
         {
-            
             var rejectedRequest = await _friendRequestRepository.RejectFriendRequestAsync(requestId, userId);
             if (rejectedRequest is null) {
                 throw new FriendRequestNotFoundException("No friend request to reject");
             }
-            var rejectedRequestDTO = new FriendRequestReadDTO
-            {
-                Id = rejectedRequest.Id,
-                SenderId = rejectedRequest.SenderId,
-                SenderFirstName = rejectedRequest.Sender.Firstname,
-                ReceiverId = rejectedRequest.ReceiverId,
-                ReceiverFirstName = rejectedRequest.Receiver.Firstname
-            };
-            return rejectedRequestDTO;
+            return _mapper.Map<FriendRequestReadDTO>(rejectedRequest);
         }
 
         // Send request
         public async Task<FriendRequestReadDTO> SendFriendRequestAsync(int senderId, FriendRequestCreateDTO requestCreateDTO)
         {
-            
-
             // check if the receiver exist by using email
             var existingReceiver = await _userRepository.GetUserByEmailAsync(requestCreateDTO.Email);
             if (existingReceiver is null)
@@ -165,7 +134,6 @@ namespace StudifyAPI.Features.FriendRequests.Service
                 throw new FriendRequestAlreadyExistException("A friend request between these users already exists.");
             }
 
-
             // create friend request entity from dto
             var sendFriendRequest = new FriendRequest
             {
@@ -176,18 +144,7 @@ namespace StudifyAPI.Features.FriendRequests.Service
             // Create friend request
             var sentRequest = await _friendRequestRepository.CreateFriendRequestAsync(sendFriendRequest);
 
-            // map sent req to dto
-            var sentRequestDTO = new FriendRequestReadDTO
-            {
-                Id = sentRequest.Id,
-                SenderId = sentRequest.SenderId,
-                SenderFirstName = sentRequest.Sender.Firstname,
-                ReceiverId = sentRequest.ReceiverId,
-                ReceiverFirstName = sentRequest.Receiver.Firstname
-            };
-
-            return sentRequestDTO;
+            return _mapper.Map<FriendRequestReadDTO>(sentRequest);
         }
-
     }
 }

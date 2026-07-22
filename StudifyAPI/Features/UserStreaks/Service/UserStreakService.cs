@@ -1,4 +1,5 @@
-﻿using StudifyAPI.Features.Users.Repositories;
+﻿using AutoMapper;
+using StudifyAPI.Features.Users.Repositories;
 using StudifyAPI.Features.UserStreaks.DTO;
 using StudifyAPI.Features.UserStreaks.Model;
 using StudifyAPI.Features.UserStreaks.Repository;
@@ -9,9 +10,11 @@ namespace StudifyAPI.Features.UserStreaks.Service
     public class UserStreakService : IUserStreakService
     {
         private readonly IUserStreakRepository _userStreakRepository;
-        public UserStreakService(IUserStreakRepository userStreakRepository, IUserRepository userRepository)
+        private readonly IMapper _mapper;
+        public UserStreakService(IUserStreakRepository userStreakRepository, IMapper mapper)
         {
             _userStreakRepository = userStreakRepository;
+            _mapper = mapper;
         }
 
         public async Task<UserStreakReadDTO> GetUserStreakByUserIdAsync(int userId)
@@ -20,13 +23,9 @@ namespace StudifyAPI.Features.UserStreaks.Service
             if (streak is null) {
                 throw new StreakNotFoundException("Streak not found"); 
             }
-            var userStreakDTO = new UserStreakReadDTO
-            {
-                CurrentStreakDays = streak.CurrentStreakDays,
-                LastUpdated = streak.LastUpdated
-            };
-            return userStreakDTO;
+            return _mapper.Map<UserStreakReadDTO>(streak);
         }
+        
         // you must update this after user had spend maybe 25 mins using the app
         public async Task<UserStreakReadDTO> UpdateUserStreaksAsync(int userId)
         {
@@ -35,18 +34,11 @@ namespace StudifyAPI.Features.UserStreaks.Service
                 throw new StreakNotFoundException("User streak not found"); 
             }
 
-            // map streak to streakDTO
-            var streakDTO = new UserStreakReadDTO
-            {
-                CurrentStreakDays = streak.CurrentStreakDays,
-                LastUpdated = streak.LastUpdated
-            };
-
             var today = DateTime.Today;
             if (streak.LastUpdated == today)
             {
                 // Already updated today, do nothing
-                return streakDTO;
+                return _mapper.Map<UserStreakReadDTO>(streak);
             }
 
             if (streak.LastUpdated == today.AddDays(-1))
@@ -65,7 +57,7 @@ namespace StudifyAPI.Features.UserStreaks.Service
             // Automatically save changes
             await _userStreakRepository.SaveChangesAsync();
 
-            return streakDTO;
+            return _mapper.Map<UserStreakReadDTO>(streak);
         }
     }
 }
