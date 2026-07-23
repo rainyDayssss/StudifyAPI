@@ -32,7 +32,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // React dev server
+        policy.AllowAnyOrigin() // Allow Vercel and local
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
