@@ -3,8 +3,25 @@
 A high-performance, maintainable **.NET 10 Web API** designed for study tracking. It leverages **Vertical Slice Architecture** to ensure clean separation of concerns and rapid feature development.
 
 ## 🚀 Technology Stack
-*   **Framework:** .NET 10
+*   **Framework:** .NET 9
 *   **Database:** MySQL (Entity Framework Core + Pomelo)
+
+...
+
+## 🚀 Deployment
+
+The API is deployed to **Render** using Docker.
+
+### Production Environment Variables
+To run the production build, the following environment variables are required:
+
+| Variable Key | Description |
+| :--- | :--- |
+| `ConnectionStrings__DefaultConnection` | The MySQL connection string for the Aiven database. |
+| `JwtSettings__SecretKey` | A 32+ character random string for JWT signing. |
+
+### Database
+The application is configured to automatically run EF Core migrations upon startup, ensuring the database schema is kept in sync with the application code.
 *   **Authentication:** JWT Bearer tokens with **Refresh Token Rotation**
 *   **Mapping:** AutoMapper
 *   **Testing:** xUnit, Moq, FluentAssertions
