@@ -21,6 +21,10 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Bind to Render's dynamically assigned PORT
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
 // ----------------------
 // CORS for React
 // ----------------------
@@ -135,6 +139,22 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+// ----------------------
+// Auto-Apply Migrations (Render deployment)
+// ----------------------
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<StudifyDbContext>();
+        dbContext.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Could not auto-apply migrations: " + ex.Message);
+    }
+}
 
 // ----------------------
 // Middleware
